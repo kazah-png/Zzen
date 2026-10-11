@@ -40,20 +40,20 @@ Keep the game visible and focused. Switching windows pauses Zzen; **Resume** con
 
 ### Example: the author's REAL BETIS squad
 
-The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation and configuration names are kept as displayed in the Spanish game.
+The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation and configuration names are kept as displayed in the Spanish game. Tactic names below are English translations of the Spanish labels in the screenshots.
 
 | Setting | Example |
 |---|---|
 | Team level | 99 |
 | Formation | 5-4-1 Doble Volante |
 | Team configuration | Justicia |
-| Displayed team AT / DF | 1,465 / 13,701 |
+| Displayed team AT / DF | 14,665 / 13,701 |
 | Coach | Alejandro |
 | Forward | Shadow Cimmerian |
 | Midfielders | Xene, Paolo Bianchi, Mehr, Riccardo Di Rigo |
 | Defenders | Bai Long, Axel Blaze, Nathan Swift, Jack Wallside, Goldie Lemmon |
 | Goalkeeper | Mark Evans |
-| Tactics | Fortaleza de llamas, Supresión inquebrantable, Formación caparazón |
+| Tactics | Flame Fortress, Unyielding Suppression, Shell Formation |
 
 ![Author's level 99 REAL BETIS squad and 5-4-1 formation](docs/example-team.png)
 
