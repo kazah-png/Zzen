@@ -82,6 +82,7 @@ void refresh(){
         historyKey=key;refreshing=false;
         if(previous>=0&&size_t(previous)<rows.size())ListView_SetItemState(historyList,previous,LVIS_SELECTED,LVIS_SELECTED);
         if(rows.empty())text(details,L"Sin partidos todavía. Abre Crónica en el juego y pulsa Iniciar sesión.");
+        else if(previous<0||size_t(previous)>=rows.size())text(details,L"Selecciona un partido para ver su resultado. Los resultados de Gratis duran esta sesión.");
     }
     if(page==1){
         if(reading!=lastOCR){lastOCR=reading;text(ocrBox,crlf(reading));}

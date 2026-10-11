@@ -4,6 +4,8 @@ Aplicación de escritorio en C++ para repetir partidos del **modo Crónica** de 
 
 **[Descargar la versión 0.1 para Windows](https://github.com/kazah-png/Zzen/releases/tag/0.1)**
 
+![Interfaz de Zzen Gratis tras completar dos partidos](docs/interface.png)
+
 ## Qué incluye
 
 - Selección de categoría, rival, aparición y dificultad.

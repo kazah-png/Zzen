@@ -11,6 +11,7 @@ Copy-Item -LiteralPath $exe -Destination "$app/Zzen.exe"
 Copy-Item -LiteralPath "$root/data/catalog.json" -Destination "$app/data/catalog.json"
 Copy-Item -LiteralPath "$root/README.md" -Destination "$app/LEEME.md"
 Copy-Item -LiteralPath "$root/docs/VALIDATION.md" -Destination "$app/docs/VALIDATION.md"
+Copy-Item -LiteralPath "$root/docs/interface.png" -Destination "$app/docs/interface.png"
 $zip=Join-Path $root "releases/Zzen-$Version-Windows-x64.zip"
 Compress-Archive -LiteralPath $app -DestinationPath $zip -Force
 $hash=(Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()

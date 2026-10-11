@@ -22,4 +22,10 @@ Las capturas del juego no se incluyen en este repositorio. Las pruebas anteriore
 
 La referencia de reconocimiento es español, teclado/ratón y 1920 × 1080. No se ha verificado cada rival, dificultad, marcador posible, idioma o resolución. El modo infinito se verifica con pruebas del motor; no constituye una prueba de funcionamiento sin interrupciones durante días.
 
-La comprobación de la sesión real se documentará al terminar la prueba de esta compilación.
+## Sesión real: 11 de octubre de 2026
+
+Royal Academy, primera aparición de Inazuma Eleven, dificultad Heroica, límite de dos partidos. La sesión arrancó en Crónica, seleccionó el rival y la dificultad, salió de la edición de alineación, activó Comandante y completó dos victorias por 4–0. Entre ambas utilizó Revancha. Al terminar la segunda volvió al menú y se detuvo con 2/2 completados, 2 victorias, 0 derrotas y 0 pendientes.
+
+La comprobación real duró aproximadamente once minutos. La compilación de distribución añade el icono y un ajuste del texto de selección de resultados; el comportamiento de observación sin entradas se verificó también en las pruebas automáticas. Las derrotas y empates se cubren en pruebas automáticas, no en esta sesión real.
+
+La compilación y las pruebas automáticas también se ejecutaron correctamente en un equipo Windows de GitHub Actions.
