@@ -10,6 +10,8 @@ A native C++ desktop app for repeating **Chronicle matches** in Inazuma Eleven: 
 
 **[Download for Windows](https://github.com/kazah-png/Zzen/releases/latest)**
 
+**[Join the Zzen Discord community](https://discord.gg/UJxYEmPra)** — Get help, report bugs, share feedback and follow development. Public repository commits appear in **#github-updates**; release news is shared in **#announcements**. The server also has a dedicated area for the upcoming Premium edition.
+
 ![Zzen desktop interface](docs/interface.png)
 
 ## Features
