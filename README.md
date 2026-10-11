@@ -82,3 +82,7 @@ This builds `dist/Zzen/Zzen.exe` and runs classification, storage, localization 
 ## Source layout
 
 `core.hpp`: classification; `vision.hpp`: capture and OCR; `zzen.cpp`: engine; `catalog_engine.inc`: navigation; `storage.hpp`: settings; `ui.hpp`: Win32 interface; `i18n.hpp`: display languages.
+
+## License
+
+Zzen Free is licensed under the [MIT License](LICENSE). This license covers this repository's code and documentation; it does not grant rights to the game, its artwork, names or trademarks. The separate Premium edition is not included in this repository.
