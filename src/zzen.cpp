@@ -34,20 +34,45 @@ static void scroll(int amount){ensureInput();RECT r;GetClientRect(gameWindow,&r)
 static void stop(const std::wstring& reason){active=false;paused=false;requestMode=0;status(reason);PostMessageW(mainWindow,WM_APP+2,0,0);}
 static void evidence(const Image& im,const Reading&r,const std::wstring& id,const std::wstring& kind){if(kind!=L"resultado-pendiente")return;auto dir=store->root/L"captures"/id;fs::create_directories(dir);auto p=dir/(stamp(true)+L"-"+kind);im.save(p.wstring()+L".png");writeText(p.wstring()+L".txt",r.text);}
 struct Engine{
- Config cfg;int finished=0,mode=1,scrolls=0,stalePages=0,topPass=0;bool inMatch=false,recorded=false,commander=false,awaitingNew=false;std::wstring id,lastPage,lastReward;size_t current=0;Clock::time_point entered=Clock::now(),matchStart=Clock::now(),lastAction=Clock::now()-std::chrono::seconds(10),newMatchAt=Clock::now();Screen previous=Screen::Unknown;std::vector<std::wstring> scanned;
- void reset(int m){std::lock_guard lock(dataMutex);cfg=store->config;mode=m;if(m==1)store->history.clear();finished=0;inMatch=false;recorded=false;commander=false;awaitingNew=false;current=0;id.clear();scrolls=stalePages=topPass=0;scanned.clear();lastPage.clear();lastReward.clear();previous=Screen::Unknown;entered=matchStart=Clock::now();lastAction=Clock::now()-std::chrono::seconds(10);debug.finished=0;categoryIndex=categoryChanges=0;tabReady=false;category.clear();lastSelection.clear();completedCategories.clear();}
- void begin(){if(inMatch)return;inMatch=true;recorded=false;id=stamp(true);matchStart=Clock::now();lastReward.clear();}
- void action(std::wstring text,std::function<void()> fn,double x=-1,double y=-1){if(Clock::now()-lastAction<std::chrono::milliseconds(1600))return;{std::lock_guard lock(dataMutex);debug.action=text;debug.x=x;debug.y=y;}logText(L"ACCIÓN · "+text);fn();lastAction=Clock::now();}
- void tap(const Line* line,std::wstring description){if(!line)return;double x=line->x+line->w/2,y=line->y+line->h/2;action(description,[=]{click(x,y);},x,y);}
+ Config cfg;int finished=0,mode=1,scrolls=0,stalePages=0,topPass=0;bool inMatch=false,recorded=false,commander=false,awaitingNew=false,scoreTimedOut=false;std::wstring id,lastPage,lastReward;size_t current=0;Clock::time_point entered=Clock::now(),matchStart=Clock::now(),lastAction=Clock::now()-std::chrono::seconds(10),newMatchAt=Clock::now();Screen previous=Screen::Unknown;std::vector<std::wstring> scanned;
+ void reset(int m){std::lock_guard lock(dataMutex);cfg=store->config;mode=m;if(m==1)store->history.clear();finished=0;inMatch=false;recorded=false;commander=false;awaitingNew=false;scoreTimedOut=false;current=0;id.clear();scrolls=stalePages=topPass=0;scanned.clear();lastPage.clear();lastReward.clear();previous=Screen::Unknown;entered=matchStart=Clock::now();lastAction=Clock::now()-std::chrono::seconds(10);debug.finished=0;categoryIndex=categoryChanges=0;tabReady=false;category.clear();lastSelection.clear();completedCategories.clear();}
+ void begin(){if(inMatch)return;inMatch=true;recorded=false;scoreTimedOut=false;id=stamp(true);matchStart=Clock::now();lastReward.clear();}
+ bool action(std::wstring text,std::function<void()> fn,double x=-1,double y=-1){if(Clock::now()-lastAction<std::chrono::milliseconds(1600))return false;{std::lock_guard lock(dataMutex);debug.action=text;debug.x=x;debug.y=y;}logText(L"ACCIÓN · "+text);fn();lastAction=Clock::now();return true;}
+ bool tap(const Line* line,std::wstring description){if(!line)return false;double x=line->x+line->w/2,y=line->y+line->h/2;return action(description,[=]{click(x,y);},x,y);}
  void addRecord(const Image& im,const Reading&r,std::optional<std::pair<int,int>> score){begin();{std::lock_guard lock(dataMutex);if(!recorded){Record m;m.id=id;m.date=stamp();m.team=cfg.team;m.route=cfg.route;m.difficulty=difficultyName(cfg.difficulty);store->history.push_back(m);current=store->history.size()-1;recorded=true;++finished;debug.finished=finished;}if(score){auto& m=store->history[current];m.score=std::to_wstring(score->first)+L"–"+std::to_wstring(score->second);m.outcome=result(score->first,score->second);m.source=L"Marcador final";}store->saveHistory();}evidence(im,r,id,score?L"marcador":L"resultado-pendiente");notify();}
  template<class VisionReader> void tick(const Image& im,const Reading&r,VisionReader& vision){auto screen=classify(r,recorded&&!awaitingNew);auto now=Clock::now();if(screen!=previous){previous=screen;entered=now;logText(L"PANTALLA · "+label(screen));}if(mode==3){status(L"Debug · Solo observación, sin pulsaciones");return;}if(screen!=Screen::Playing&&screen!=Screen::Unknown&&now-entered>std::chrono::seconds(75))throw std::runtime_error("La pantalla no avanza. Consulta Debug y reanuda tras revisarla.");if(screen==Screen::Unknown&&now-entered>std::chrono::seconds(90))throw std::runtime_error("Pantalla desconocida durante 90 s. Se ha detenido la entrada.");if(inMatch&&now-matchStart>std::chrono::minutes(30))throw std::runtime_error("Partido superior a 30 minutos.");
   if(awaitingNew){if(isMatchScreen(screen)){awaitingNew=false;inMatch=false;begin();commander=false;}else if(now-newMatchAt>std::chrono::seconds(45))throw std::runtime_error("La revancha no ha comenzado.");else return;}
   if(mode==2){scan(im,r,screen);return;}
   if(mode==3){status(L"Debug · Solo observación, sin pulsaciones");return;}
   if(isMatchScreen(screen))begin();
-  if(screen==Screen::FinalScore){if(!inMatch){status(L"Marcador de un partido anterior: inicia desde una ruta o un partido en curso");return;}bool known=false;{std::lock_guard lock(dataMutex);known=recorded&&store->history[current].outcome!=L"Pendiente";}if(!known){auto score=vision.score(im);if(!active||paused)return;if(score){addRecord(im,r,score);status(L"Marcador leído: "+std::to_wstring(score->first)+L"–"+std::to_wstring(score->second));return;}status(L"Esperando a que el marcador sea legible");if(now-entered>std::chrono::seconds(20)){addRecord(im,r,{});throw std::runtime_error("Marcador ilegible: captura guardada, sin avanzar.");}return;}tap(find(r,L"fin del partido"),L"Aceptar marcador final");return;}
+  if(screen==Screen::FinalScore){
+   if(!inMatch){status(L"Marcador de un partido anterior: inicia desde una ruta o un partido en curso");return;}
+   bool known=false;{std::lock_guard lock(dataMutex);known=recorded&&store->history[current].outcome!=L"Pendiente";}
+   if(!known&&!scoreTimedOut){
+    auto score=vision.score(im);if(!active||paused)return;
+    if(score){addRecord(im,r,score);status(L"Marcador leído: "+std::to_wstring(score->first)+L"–"+std::to_wstring(score->second));return;}
+    if(now-entered<std::chrono::seconds(20)){status(L"Esperando a que el marcador sea legible");return;}
+    addRecord(im,r,{});scoreTimedOut=true;
+    status(L"Marcador ilegible: resultado pendiente guardado; continúa el farmeo");
+   }
+   tap(find(r,L"fin del partido",.75),L"Aceptar marcador final");return;
+  }
   if(screen==Screen::Rewards||screen==Screen::Experience){if(inMatch&&!recorded)addRecord(im,r,{});if(recorded){auto next=find(r,L"siguiente",.75);if(next)tap(next,L"Avanzar resultados");else if(screen==Screen::Rewards)action(L"Continuar resultados",[]{click(.87,.93);},.87,.93);}return;}
-  if(screen==Screen::Rematch){if(!recorded){status(L"Pantalla de un partido anterior. Vuelve a la ruta para iniciar una sesión.");return;}evidence(im,r,id,L"recompensas-finales");bool pending;{std::lock_guard lock(dataMutex);pending=store->history[current].outcome==L"Pendiente";}if(pending)throw std::runtime_error("Resultado pendiente: revisa su captura y corrígelo desde Historial.");if(repeat(finished,cfg.count,cfg.infinite)){if(now-lastAction<std::chrono::milliseconds(1600))return;tap(find(r,L"jugar revancha"),L"Jugar revancha");awaitingNew=true;newMatchAt=Clock::now();recorded=false;inMatch=false;id.clear();}else{if(now-lastAction<std::chrono::milliseconds(1600))return;tap(find(r,L"volver al men"),L"Volver al menú: límite alcanzado");stop(L"Sesión completada · "+std::to_wstring(finished)+L" partidos");}return;}
+  if(screen==Screen::Rematch){
+   // Only adopt a missed result when this session already witnessed the match.
+   if(!recorded&&inMatch)addRecord(im,r,{});
+   if(!recorded){status(L"Pantalla de un partido anterior. Vuelve a la ruta para iniciar una sesión.");return;}
+   bool pending;{std::lock_guard lock(dataMutex);pending=store->history[current].outcome==L"Pendiente";}
+   if(pending)status(L"Resultado pendiente de revisión; continúa el farmeo");
+   if(repeat(finished,cfg.count,cfg.infinite)){
+    if(tap(find(r,L"jugar revancha"),L"Jugar revancha")){
+     awaitingNew=true;newMatchAt=Clock::now();recorded=false;inMatch=false;id.clear();
+    }
+   }else if(tap(find(r,L"volver al men"),L"Volver al menú: límite alcanzado")){
+    stop(L"Sesión completada · "+std::to_wstring(finished)+L" partidos");
+   }
+   return;
+  }
   if(screen==Screen::Formation){action(L"Terminar edición · botón inferior",[]{click(.235,.925);},.235,.925);return;}
   if(screen==Screen::Presentation){tap(find(r,L"pulsa el bot"),L"Avanzar presentación");return;}
   if(screen==Screen::Lineup){tap(find(r,L"siguiente",.86),L"Avanzar alineación");return;}

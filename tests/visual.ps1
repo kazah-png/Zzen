@@ -1,7 +1,8 @@
 param(
  [Parameter(Mandatory=$true)][string]$Fixtures,
  [string]$Executable=(Join-Path (Split-Path $PSScriptRoot) 'dist/Zzen/Zzen.exe'),
- [string]$RewardsCapture
+ [string]$RewardsCapture,
+ [string]$RematchCapture
 )
 $ErrorActionPreference='Stop'
 $reports=Join-Path (Split-Path $PSScriptRoot) 'build/visual-reports'
@@ -18,6 +19,7 @@ $cases=@(
  @{Image='duel-defeat.png';Excludes='Marcador final'}
 )
 if($RewardsCapture){$cases+=@{Image=(Resolve-Path $RewardsCapture).Path;Contains='Recompensas'}}
+if($RematchCapture){$cases+=@{Image=(Resolve-Path $RematchCapture).Path;Contains='Revancha'}}
 foreach($case in $cases){
  $image=if([IO.Path]::IsPathRooted($case.Image)){$case.Image}else{Join-Path (Resolve-Path $Fixtures) $case.Image}
  $report=Join-Path $reports ([IO.Path]::GetFileName($case.Image)+'.txt')

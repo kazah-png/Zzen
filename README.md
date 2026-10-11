@@ -84,7 +84,7 @@ Zzen uses screenshots and normal Windows input. It does not modify game files, i
 
 Open **Diagnostics**. **Observe game** analyzes the screen without sending inputs. **Save diagnostics** saves the capture and activity log locally.
 
-An unreadable score is marked **Pending** and pauses progress. Review the evidence before using **Review result**. It is never assumed to be a win. Free results reset on a new session or when closing the app.
+A missed or unreadable score is marked **Pending**, with evidence saved locally, and farming continues. A visible final score is retried for up to 20 seconds before it is left pending. Pending matches count toward the session's match limit but never count as a win or loss. Review the evidence before using **Review result**. Free results reset on a new session or when closing the app. Unrecognized screens and loss of game focus can still pause the session.
 
 ## Local data
 

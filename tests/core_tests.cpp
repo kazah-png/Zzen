@@ -20,6 +20,9 @@ int main(){
  assert(classify(r)!=Screen::FinalScore);
  r.text=L"RESULTADOS FIN DEL PARTIDO";
  assert(classify(r)==Screen::FinalScore);
+ r={};r.text=L"Fin del partido";r.lines.push_back({L"Fin del partido",.7,.92,.2,.04});
+ assert(classify(r)==Screen::FinalScore);
+ r.lines[0].y=.3;assert(classify(r)==Screen::Unknown);
  r.text=L"RESULTADOS Objetos Espíritus Jugar revancha";
  assert(classify(r)==Screen::Rematch);
  r={};r.text=L"RESULTADOS.-\nOBJETOS\nESPÍRITUS\n0 Siguiente";

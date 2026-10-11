@@ -27,7 +27,7 @@ enum class Screen{Unknown,Formation,Rematch,FinalScore,Rewards,Experience,TeamLi
 inline Screen classify(const Reading& r,bool postMatch=false){
  if((has(r.bottom,L"termi")&&has(r.bottom,L"edici"))||find(r,L"terminar edici",.85))return Screen::Formation;
  if(has(r.text,L"jugar revancha"))return Screen::Rematch;
- if(has(r.text,L"resultados")&&has(r.text,L"fin del partido"))return Screen::FinalScore;
+ if((has(r.text,L"resultados")&&has(r.text,L"fin del partido"))||find(r,L"fin del partido",.75))return Screen::FinalScore;
  if(has(r.text,L"objetos")&&has(r.text,L"espiritus"))return Screen::Rewards;
  if(has(r.text,L"resultados"))return Screen::Experience;
  if(has(r.text,L"elige un equipo al que"))return Screen::TeamList;

@@ -98,6 +98,8 @@ inline const std::map<std::wstring,std::array<std::wstring,6>>& catalog(){
    L"Esperando|Waiting|待機中|等待中|En attente|प्रतीक्षा",
    L"Pausado|Paused|一時停止|已暂停|En pause|रुका हुआ",
    L"Marcador leído|Score recognized|スコア認識済み|已识别比分|Score reconnu|स्कोर पहचाना गया",
+   L"Resultado pendiente de revisión; continúa el farmeo|Result pending review; farming continues|結果は未確認です。周回を続けます|结果待确认；继续刷取|Résultat à vérifier ; les matchs continuent|परिणाम की समीक्षा लंबित है; फ़ार्मिंग जारी है",
+   L"Marcador ilegible: resultado pendiente guardado; continúa el farmeo|Unreadable score: pending result saved; farming continues|スコアを読めません。未確認として保存し、周回を続けます|比分无法识别：已保存为待确认；继续刷取|Score illisible : résultat à vérifier enregistré ; les matchs continuent|स्कोर पढ़ा नहीं जा सका: लंबित परिणाम सहेजा गया; फ़ार्मिंग जारी है",
    L"Debug · Solo observación, sin pulsaciones|Diagnostics · Observation only, no inputs|診断 · 観察のみ、操作なし|诊断 · 仅观察，无输入|Diagnostic · Observation uniquement|निदान · केवल निरीक्षण, कोई इनपुट नहीं",
    L"Primero utiliza Observar juego, en Diagnóstico.|Use Observe game in Diagnostics first.|先に診断の「ゲームを確認」を使用してください。|请先使用诊断中的“观察游戏”。|Utilisez d’abord Observer le jeu dans Diagnostic.|पहले निदान में खेल देखें चुनें।",
    L"Detén la sesión actual antes de iniciar otra.|Stop the current session before starting another.|新しいセッションの前に現在のセッションを停止してください。|开始新会话前请停止当前会话。|Arrêtez la session actuelle avant d’en démarrer une autre.|नया सत्र शुरू करने से पहले वर्तमान सत्र समाप्त करें।",
