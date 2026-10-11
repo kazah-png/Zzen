@@ -6,9 +6,13 @@ Screen classification, win/loss/draw outcomes, finite and unlimited repetition, 
 
 Localization tests check six-language resource completeness, stable Spanish recognition and saved language preferences.
 
+Version 0.2.1 adds regression coverage for accented Spanish capitals in the default C locale, uppercase reward headings, a missing results heading after a completed match, and alternating OCR frames without resetting the screen timeout or counting the match twice.
+
 ## Local visual regression
 
 Nine captures cover formation editing, two difficulty-menu variants, the team list, 5–0 and 4–0 scores, a score with a cursor, an unreadable transition, and a duel displaying “Derrota” that must not count as a final match loss. Game captures are not distributed. Offline tests require neither captures nor a running game.
+
+For the 0.2.1 fix, the privately saved October 11 reward-screen diagnostic was also replayed through Windows OCR and correctly classified as Rewards. Pass its image with `-RewardsCapture C:/path/to/pantalla.png` to include this regression in the visual test script. The new fix was checked against the saved capture and simulated engine transitions; the live session below predates it.
 
 ## Live session: October 11, 2026
 

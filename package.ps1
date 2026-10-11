@@ -1,4 +1,4 @@
-param([string]$Version='0.2')
+param([string]$Version='0.2.1')
 $ErrorActionPreference='Stop'
 if($Version -notmatch '^\d+\.\d+(\.\d+)?$'){throw 'Invalid version'}
 $root=$PSScriptRoot
@@ -12,7 +12,7 @@ Copy-Item -LiteralPath "$root/data/catalog.json" -Destination "$app/data/catalog
 Copy-Item -LiteralPath "$root/README.md" -Destination "$app/README.md"
 Copy-Item -LiteralPath "$root/LICENSE" -Destination "$app/LICENSE"
 Copy-Item -LiteralPath "$root/docs/VALIDATION.md" -Destination "$app/docs/VALIDATION.md"
-Copy-Item -LiteralPath "$root/docs/interface.png" -Destination "$app/docs/interface.png"
+Get-ChildItem -LiteralPath "$root/docs" -Filter *.png | Copy-Item -Destination "$app/docs"
 $zip=Join-Path $root "releases/Zzen-$Version-Windows-x64.zip"
 Compress-Archive -LiteralPath $app -DestinationPath $zip -Force
 $hash=(Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()

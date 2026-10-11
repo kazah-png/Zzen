@@ -17,7 +17,22 @@ int wmain(int argc,wchar_t** argv){
     auto final=reading(L"RESULTADOS FIN DEL PARTIDO",L"Fin del partido");
     ready(e);e.tick(image,final,vision);assert(store->history.size()==1&&e.finished==1&&vision.calls==1);
     ready(e);e.tick(image,final,vision);assert(e.finished==1&&vision.calls==1&&testInputs.size()==1);
+    // A completed match may lose its heading between OCR frames. Still advance once,
+    // keep the result, and do not reset the screen watchdog for the same result page.
+    auto nextOnly=reading(L"0 Siguiente",L"0 Siguiente",.8,.91);
+    auto experience=reading(L"RESULTADOS",L"Siguiente",.8,.91);
+    for(auto& frame:{experience,nextOnly,experience,nextOnly}){
+        ready(e);e.tick(image,frame,vision);
+        assert(testInputs.size()==1&&e.previous==Screen::Experience);
+        assert(e.finished==1&&store->history.size()==1&&vision.calls==1);
+    }
+    e.entered=Clock::now()-std::chrono::seconds(80);ready(e);
+    bool timedOut=false;try{e.tick(image,nextOnly,vision);}catch(const std::runtime_error&){timedOut=true;}
+    assert(timedOut&&testInputs.empty());e.entered=Clock::now();
     ready(e);e.tick(image,reading(L"RESULTADOS OBJETOS ESPÍRITUS",L"Siguiente"),vision);assert(testInputs.size()==1);
+    assert(e.previous==Screen::Rewards&&!paused);
+    ready(e);e.tick(image,reading(L"OBJETOS ESPÍRITUS",L"Siguiente"),vision);
+    assert(e.previous==Screen::Rewards&&testInputs.size()==1&&e.finished==1);
     auto rematch=reading(L"RESULTADOS Jugar revancha",L"Jugar revancha",.35,.65);
     rematch.lines.push_back({L"Volver al menú",.35,.75,.3,.06});
     ready(e);e.tick(image,rematch,vision);assert(e.awaitingNew&&testInputs.size()==1);

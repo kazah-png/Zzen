@@ -1,8 +1,12 @@
 #include "../src/core.hpp"
 #include <cassert>
 #include <iostream>
+#include <clocale>
 using namespace zzen;
 int main(){
+ std::setlocale(LC_ALL,"C");
+ assert(norm(L"ÁÉÍÓÚÜÑ")==L"aeiouuñ");
+ assert(has(L"ESPÍRITUS",L"espiritus"));
  assert(repeat(0,1,false));
  assert(!repeat(1,1,false));
  assert(!repeat(5,2,false));
@@ -18,6 +22,14 @@ int main(){
  assert(classify(r)==Screen::FinalScore);
  r.text=L"RESULTADOS Objetos Espíritus Jugar revancha";
  assert(classify(r)==Screen::Rematch);
+ r={};r.text=L"RESULTADOS.-\nOBJETOS\nESPÍRITUS\n0 Siguiente";
+ r.lines.push_back({L"0 Siguiente",.8,.91,.12,.04});
+ assert(classify(r)==Screen::Rewards);
+ r.text=L"OBJETOS\nESPÍRITUS\n0 Siguiente";
+ assert(classify(r)==Screen::Rewards);
+ r.text=L"0 Siguiente";
+ assert(classify(r)==Screen::Lineup);
+ assert(classify(r,true)==Screen::Experience);
  r={};r.text=L"Elige un equipo al que enfrentarte.";
  assert(classify(r)==Screen::TeamList);
  std::cout<<"OK: limites, resultados y clasificacion de pantallas\n";

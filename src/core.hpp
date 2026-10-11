@@ -8,18 +8,27 @@
 #include <chrono>
 namespace zzen {
 using Clock=std::chrono::steady_clock;
-inline std::wstring norm(std::wstring s){for(auto& c:s){c=std::towlower(c);switch(c){case L'á':c=L'a';break;case L'é':c=L'e';break;case L'í':c=L'i';break;case L'ó':c=L'o';break;case L'ú':case L'ü':c=L'u';break;}}for(auto pair:{std::pair{L"vla lactea",L"via lactea"},std::pair{L"flota lxar",L"flota ixar"}}){size_t p=0;while((p=s.find(pair.first,p))!=s.npos){s.replace(p,wcslen(pair.first),pair.second);p+=wcslen(pair.second);}}return s;}
+inline std::wstring norm(std::wstring s){
+ // Windows starts in the C locale: towlower alone leaves accented capitals unchanged.
+ for(auto& c:s){switch(c){
+  case L'Á':case L'á':c=L'a';break;case L'É':case L'é':c=L'e';break;
+  case L'Í':case L'í':c=L'i';break;case L'Ó':case L'ó':c=L'o';break;
+  case L'Ú':case L'ú':case L'Ü':case L'ü':c=L'u';break;
+  case L'Ñ':c=L'ñ';break;default:c=std::towlower(c);break;
+ }}
+ for(auto pair:{std::pair{L"vla lactea",L"via lactea"},std::pair{L"flota lxar",L"flota ixar"}}){size_t p=0;while((p=s.find(pair.first,p))!=s.npos){s.replace(p,wcslen(pair.first),pair.second);p+=wcslen(pair.second);}}return s;
+}
 inline bool has(const std::wstring& s,const std::wstring& part){return norm(s).find(norm(part))!=std::wstring::npos;}
 inline std::wstring trim(std::wstring s){auto a=s.find_first_not_of(L" \r\n\t");return a==s.npos?L"":s.substr(a,s.find_last_not_of(L" \r\n\t")-a+1);}
 struct Line{std::wstring text;double x=0,y=0,w=0,h=0;};
 struct Reading{std::wstring text,bottom;std::vector<Line> lines;};
 inline const Line* find(const Reading& r,const std::wstring& text,double minY=0,double maxY=1,double minX=0,double maxX=1){for(auto& l:r.lines)if(l.y>=minY&&l.y<maxY&&l.x>=minX&&l.x<maxX&&has(l.text,text))return &l;return nullptr;}
 enum class Screen{Unknown,Formation,Rematch,FinalScore,Rewards,Experience,TeamList,Difficulty,RouteMenu,RouteMap,PreMatch,Presentation,Lineup,Kickoff,Playing,HalfTime,Station};
-inline Screen classify(const Reading& r){
+inline Screen classify(const Reading& r,bool postMatch=false){
  if((has(r.bottom,L"termi")&&has(r.bottom,L"edici"))||find(r,L"terminar edici",.85))return Screen::Formation;
  if(has(r.text,L"jugar revancha"))return Screen::Rematch;
  if(has(r.text,L"resultados")&&has(r.text,L"fin del partido"))return Screen::FinalScore;
- if(has(r.text,L"resultados")&&has(r.text,L"objetos")&&has(r.text,L"espiritus"))return Screen::Rewards;
+ if(has(r.text,L"objetos")&&has(r.text,L"espiritus"))return Screen::Rewards;
  if(has(r.text,L"resultados"))return Screen::Experience;
  if(has(r.text,L"elige un equipo al que"))return Screen::TeamList;
  if(find(r,L"guardar",.7,1,0,.45)&&has(r.text,L"batalla"))return Screen::Difficulty;
@@ -28,7 +37,8 @@ inline Screen classify(const Reading& r){
  if(find(r,L"empezar",.75)||has(r.text,L"empezar partido?"))return Screen::PreMatch;
  if(has(r.text,L"pulsa el bot"))return Screen::Presentation;
  if(find(r,L"saque de centro",.7))return Screen::Kickoff;
- if(find(r,L"siguiente",.86))return Screen::Lineup;
+ // A blinking result heading must not turn a completed match into a pre-match lineup.
+ if(find(r,L"siguiente",.86))return postMatch?Screen::Experience:Screen::Lineup;
  if(find(r,L"comenzar",.65)||find(r,L"reanudar",.65))return Screen::HalfTime;
  if(find(r,L"modo manual",.7)||find(r,L"modo comandante",.7))return Screen::Playing;
  if(has(r.text,L"elige una ruta")||has(r.text,L"selecciona una ruta"))return Screen::Station;

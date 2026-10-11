@@ -1,6 +1,7 @@
 param(
  [Parameter(Mandatory=$true)][string]$Fixtures,
- [string]$Executable=(Join-Path (Split-Path $PSScriptRoot) 'dist/Zzen/Zzen.exe')
+ [string]$Executable=(Join-Path (Split-Path $PSScriptRoot) 'dist/Zzen/Zzen.exe'),
+ [string]$RewardsCapture
 )
 $ErrorActionPreference='Stop'
 $reports=Join-Path (Split-Path $PSScriptRoot) 'build/visual-reports'
@@ -16,9 +17,10 @@ $cases=@(
  @{Image='score-transition.png';Contains='SCORE=unreadable'},
  @{Image='duel-defeat.png';Excludes='Marcador final'}
 )
+if($RewardsCapture){$cases+=@{Image=(Resolve-Path $RewardsCapture).Path;Contains='Recompensas'}}
 foreach($case in $cases){
- $image=Join-Path (Resolve-Path $Fixtures) $case.Image
- $report=Join-Path $reports ($case.Image+'.txt')
+ $image=if([IO.Path]::IsPathRooted($case.Image)){$case.Image}else{Join-Path (Resolve-Path $Fixtures) $case.Image}
+ $report=Join-Path $reports ([IO.Path]::GetFileName($case.Image)+'.txt')
  $process=Start-Process -FilePath $Executable -ArgumentList @('--analyze',('"'+$image+'"'),('"'+$report+'"')) -PassThru -WindowStyle Hidden
  if(!$process.WaitForExit(30000)){throw "Timeout: $($case.Image)"}
  if($process.ExitCode -ne 0){throw "Error: $($case.Image)"}
