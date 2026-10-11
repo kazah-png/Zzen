@@ -40,13 +40,13 @@ Keep the game visible and focused. Switching windows pauses Zzen; **Resume** con
 
 ### Example: the author's REAL BETIS squad
 
-The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation and configuration names are kept as displayed in the Spanish game. Tactic names below are English translations of the Spanish labels in the screenshots.
+The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation, team configuration and tactic names below are English translations of the Spanish labels in the screenshots.
 
 | Setting | Example |
 |---|---|
 | Team level | 99 |
-| Formation | 5-4-1 Doble Volante |
-| Team configuration | Justicia |
+| Formation | 5-4-1 Double Pivot |
+| Team configuration | Justice |
 | Displayed team AT / DF | 14,665 / 13,701 |
 | Coach | Alejandro |
 | Forward | Shadow Cimmerian |
@@ -62,7 +62,7 @@ The accompanying passive setup includes **+90% tension when winning a focus or c
 <details>
 <summary>View the example team's passive bonuses</summary>
 
-![Passive bonuses for the author's Justicia team configuration](docs/example-team-passives.png)
+![Passive bonuses for the author's Justice team configuration](docs/example-team-passives.png)
 
 </details>
 
