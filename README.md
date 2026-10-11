@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="Zzen logo" width="64" height="64">
+</p>
+
 # Zzen · Free
 
 A native C++ desktop app for repeating **Chronicle matches** in Inazuma Eleven: Victory Road with Commander mode and Rematch.
@@ -29,6 +33,38 @@ Free keeps results only for the current session. Item recognition and persistent
 5. Select **Start session**. Zzen finds the opponent, enables Commander and repeats with Rematch.
 
 Keep the game visible and focused. Switching windows pauses Zzen; **Resume** continues. **F8** stops it. Only one Zzen edition can run at a time.
+
+## Prepare a strong team
+
+**For the best farming results, use a strong, well-equipped in-game team suited to your chosen opponent and difficulty.** Zzen repeats matches in Commander mode; your squad, equipment, tactics and team passives still determine how well it performs. Play a trial match in Commander mode before starting a long session, and choose a difficulty your team can beat consistently. No lineup guarantees every win.
+
+### Example: the author's REAL BETIS squad
+
+The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation and configuration names are kept as displayed in the Spanish game.
+
+| Setting | Example |
+|---|---|
+| Team level | 99 |
+| Formation | 5-4-1 Doble Volante |
+| Team configuration | Justicia |
+| Displayed team AT / DF | 1,465 / 13,701 |
+| Coach | Alejandro |
+| Forward | Shadow Cimmerian |
+| Midfielders | Xene, Paolo Bianchi, Mehr, Riccardo Di Rigo |
+| Defenders | Bai Long, Axel Blaze, Nathan Swift, Jack Wallside, Goldie Lemmon |
+| Goalkeeper | Mark Evans |
+| Tactics | Fortaleza de llamas, Supresión inquebrantable, Formación caparazón |
+
+![Author's level 99 REAL BETIS squad and 5-4-1 formation](docs/example-team.png)
+
+The accompanying passive setup includes **+90% tension when winning a focus or contest**, **+10% wall DF until the team is fouled**, and a **+8% team shot AT bonus for 30 seconds after regaining possession without a direct catch**. These are the values shown in this example; use the screenshots to compare your own setup, and check its performance against the actual match conditions.
+
+<details>
+<summary>View the example team's passive bonuses</summary>
+
+![Passive bonuses for the author's Justicia team configuration](docs/example-team-passives.png)
+
+</details>
 
 ## App language versus game language
 
