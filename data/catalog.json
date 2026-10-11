@@ -1,0 +1,790 @@
+{
+  "teams": [
+    {
+      "route": "Inazuma Eleven",
+      "team": "Royal Academy",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Inazuma Kids FC",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Occult",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Wild",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Brain",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Otaku",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Royal Academy",
+      "occurrence": 2,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Veteranos Inazuma",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Shuriken",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Farm",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Kirkwood",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Zeus",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven",
+      "team": "Equipo Ogro",
+      "occurrence": 1,
+      "tab": 0
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Tormenta de Géminis",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Servicio Secreto",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Tormenta de Géminis",
+      "occurrence": 2,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Alpino",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Tormenta de Géminis",
+      "occurrence": 3,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Claustro Sagrado",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Épsilon",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Royal Academy Redux",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Triple C",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Épsilon",
+      "occurrence": 2,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Fauxshore",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Génesis",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Mary Times",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Épsilon Plus",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Prominence",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Polvo de Diamantes",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Raimon",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Caos",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Génesis",
+      "occurrence": 2,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 2",
+      "team": "Emperadores Oscuros",
+      "occurrence": 1,
+      "tab": 1
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Pruebas de Selección - Equipo B",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Big Waves",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Leones del Desierto",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Neo Japón",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Dragones de Fuego",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Knights of Queen",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Equipo D",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Los Emperadores",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Unicorn",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Los Rojos",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Orfeo",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Sky Team",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Dark Team",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Ángel Oscuro",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Os Reis",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Equipo Zoolan",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Orfeo",
+      "occurrence": 2,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Pequeños Gigantes",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven 3",
+      "team": "Raimon equipo B",
+      "occurrence": 1,
+      "tab": 2
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Caballeros Templarios",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Inazuma Kids FC",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Empollones",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Vía Láctea",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Poderosa Fe",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Royal Academy",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Cala Pirata",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Edad Dorada",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Mar de Luna",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Alpino",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Kirkwood",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Luz Eterna",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Oscuridad Ancestral",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Equipo Zero",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Espejismo",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Revolucionarios",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Universal",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Monte Olimpo",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Dragon Link",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Garra del Sur",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Colmillo del Norte",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO",
+      "team": "Cuerno Demoníaco",
+      "occurrence": 1,
+      "tab": 3
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Protocolo Omega",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Protocolo Omega",
+      "occurrence": 2,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Protocolo Omega",
+      "occurrence": 3,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Selección de Japón",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Protocolo Omega 2.0",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Ciervo Blanco",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Ira de Imagawa",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Protocolo Omega 3.0",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Ejército de terracota",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Zanark Domain",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Zanark Domain",
+      "occurrence": 2,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Cascada Perfecta",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Cascada Perfecta",
+      "occurrence": 2,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Caballeros de la Mesa Redonda",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Cascada Perfecta",
+      "occurrence": 3,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Zan",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Gir",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Gar",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Ragnah",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Zanark Outsiders",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Aullido Lunar",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Nosfanáticos",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Criaturas de la Noche",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Inazuma Japón Legendario",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO 2",
+      "team": "Desesperdidos",
+      "occurrence": 1,
+      "tab": 4
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Royal Academy",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Dragones de Fuego",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Big Waves",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Cimitarras",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Muay Tígers",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Resistencia Japón",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Storm Wolves",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Sílice",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Naiadi",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Magmavís",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Fertilia",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Falam Medius",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Flota Ixar",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Big Bang",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Supernova",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Dinastía Galáctica",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven GO Galaxy",
+      "team": "Guardianas",
+      "occurrence": 1,
+      "tab": 5
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Barcelona Orb",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Academia Polaris",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Bastión",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Kirkwood",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Brain",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Royal Academy",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Academia Polaris",
+      "occurrence": 2,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Academia Plenilunio",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Zeus",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Alpino",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Academia Alia",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Instituto Ribera",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Academia Plenilunio",
+      "occurrence": 2,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Ares",
+      "team": "Plathos",
+      "occurrence": 1,
+      "tab": 6
+    },
+    {
+      "route": "Inazuma Eleven: Orión",
+      "team": "Bisonte Rojo",
+      "occurrence": 1,
+      "tab": 7
+    }
+  ]
+}

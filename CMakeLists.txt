@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.24)
+project(Zzen VERSION 0.1 LANGUAGES CXX RC)
+if(NOT WIN32 OR NOT MSVC)
+  message(FATAL_ERROR "Zzen requires Windows, MSVC and Windows SDK with C++/WinRT")
+endif()
+add_executable(Zzen WIN32 src/zzen.cpp src/app.rc)
+target_include_directories(Zzen PRIVATE assets)
+target_compile_features(Zzen PRIVATE cxx_std_20)
+target_compile_definitions(Zzen PRIVATE UNICODE _UNICODE NOMINMAX)
+target_compile_options(Zzen PRIVATE /utf-8 /W4 /EHsc)
+target_link_options(Zzen PRIVATE /MANIFEST:EMBED)
+set_property(TARGET Zzen PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+target_link_libraries(Zzen PRIVATE windowsapp runtimeobject gdiplus comctl32 user32 gdi32 ole32 shell32 comdlg32 dwmapi uxtheme)
+add_custom_command(TARGET Zzen POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Zzen>/data"
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/data/catalog.json" "$<TARGET_FILE_DIR:Zzen>/data/catalog.json")
