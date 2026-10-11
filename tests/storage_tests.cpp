@@ -11,8 +11,8 @@ int wmain(int argc,wchar_t** argv){
     Store first(root);assert(first.history.empty());auto original=readText(history);
     Record r;r.id=L"test";first.history.push_back(r);first.saveHistory();
     assert(readText(history)==original);Store second(root);assert(second.history.empty());
-    first.config.count=7;first.config.infinite=true;first.profile();
-    Store loaded(root);assert(loaded.config.count==7&&loaded.config.infinite);
+    first.config.count=7;first.config.infinite=true;first.config.language=5;first.profile();
+    Store loaded(root);assert(loaded.config.count==7&&loaded.config.infinite&&loaded.config.language==5);
     first.config.count=8;first.profile();
     writeText(root/L"data"/L"profile.json",L"broken JSON");
     Store recovered(root);assert(recovered.config.count==7);

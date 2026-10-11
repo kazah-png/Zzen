@@ -39,6 +39,6 @@ inline bool isMatchScreen(Screen s){return s==Screen::Formation||s==Screen::Pres
 inline bool repeat(int finished,int limit,bool infinite){return infinite||finished<limit;}
 inline std::wstring result(int ours,int theirs){return ours>theirs?L"Victoria":ours<theirs?L"Derrota":L"Empate";}
 inline std::vector<Line> teams(const Reading& r){std::vector<Line> out;for(auto l:r.lines){l.text=trim(l.text);if(norm(l.text)==L"via lactea")l.text=L"Vía Láctea";if(norm(l.text)==L"flota ixar")l.text=L"Flota Ixar";if(l.x>.057&&l.x<.38&&l.y>.26&&l.y<.83&&l.text.size()>2&&!has(l.text,L"Nv.")&&!has(l.text,L"completado"))out.push_back(l);}std::sort(out.begin(),out.end(),[](auto&a,auto&b){return a.y<b.y;});return out;}
-struct Config{std::wstring team=L"Royal Academy",route=L"Inazuma Eleven";int difficulty=3,count=1,occurrence=1;bool infinite=false;};
+struct Config{std::wstring team=L"Royal Academy",route=L"Inazuma Eleven";int difficulty=3,count=1,occurrence=1,language=0;bool infinite=false;};
 struct Record{std::wstring id,date,team,route,difficulty,outcome=L"Pendiente",score,rewards,source=L"OCR";};
 }

@@ -1,15 +1,15 @@
-param([string]$Version='0.1')
+param([string]$Version='0.2')
 $ErrorActionPreference='Stop'
-if($Version -notmatch '^\d+\.\d+(\.\d+)?$'){throw 'Versión no válida'}
+if($Version -notmatch '^\d+\.\d+(\.\d+)?$'){throw 'Invalid version'}
 $root=$PSScriptRoot
 $exe=Join-Path $root 'dist/Zzen/Zzen.exe'
-if(!(Test-Path $exe)){throw 'Primero compila con build.ps1 -Test'}
+if(!(Test-Path $exe)){throw 'Build with build.ps1 -Test first'}
 $stage=Join-Path $root ('build/package-'+[guid]::NewGuid().ToString('N'))
 $app=Join-Path $stage 'Zzen'
 New-Item -ItemType Directory -Path "$app/data","$app/docs","$root/releases" -Force | Out-Null
 Copy-Item -LiteralPath $exe -Destination "$app/Zzen.exe"
 Copy-Item -LiteralPath "$root/data/catalog.json" -Destination "$app/data/catalog.json"
-Copy-Item -LiteralPath "$root/README.md" -Destination "$app/LEEME.md"
+Copy-Item -LiteralPath "$root/README.md" -Destination "$app/README.md"
 Copy-Item -LiteralPath "$root/docs/VALIDATION.md" -Destination "$app/docs/VALIDATION.md"
 Copy-Item -LiteralPath "$root/docs/interface.png" -Destination "$app/docs/interface.png"
 $zip=Join-Path $root "releases/Zzen-$Version-Windows-x64.zip"

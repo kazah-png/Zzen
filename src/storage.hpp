@@ -66,6 +66,7 @@ struct Store {
         config.difficulty=boundedNumber(o,L"difficulty",3,0,5);
         config.count=boundedNumber(o,L"count",1,1,100000);
         config.occurrence=boundedNumber(o,L"occurrence",1,1,20);
+        config.language=boundedNumber(o,L"language",0,0,5);
         config.infinite=o.GetNamedBoolean(L"infinite",false);
         auto c=loadObj(root/L"data"/L"catalog.json").GetNamedArray(L"teams",JsonArray());
         for(auto value:c) {
@@ -77,6 +78,7 @@ struct Store {
     }
     void profile() {
         JsonObject o;put(o,L"team",config.team);put(o,L"route",config.route);
+        o.SetNamedValue(L"language",JsonValue::CreateNumberValue(config.language));
         o.SetNamedValue(L"difficulty",JsonValue::CreateNumberValue(config.difficulty));
         o.SetNamedValue(L"count",JsonValue::CreateNumberValue(config.count));
         o.SetNamedValue(L"occurrence",JsonValue::CreateNumberValue(config.occurrence));

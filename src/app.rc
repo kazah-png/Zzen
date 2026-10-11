@@ -1,8 +1,8 @@
 #include <windows.h>
 1 ICON "zzen.ico"
 1 VERSIONINFO
-FILEVERSION 0,1,0,0
-PRODUCTVERSION 0,1,0,0
+FILEVERSION 0,2,0,0
+PRODUCTVERSION 0,2,0,0
 FILEOS VOS_NT_WINDOWS32
 FILETYPE VFT_APP
 BEGIN
@@ -11,10 +11,10 @@ BEGIN
   BLOCK "040904B0"
   BEGIN
    VALUE "CompanyName", "kazah-png\0"
-   VALUE "FileDescription", "Zzen Gratis - Cronica\0"
-   VALUE "FileVersion", "0.1\0"
+   VALUE "FileDescription", "Zzen Free - Chronicle\0"
+   VALUE "FileVersion", "0.2\0"
    VALUE "ProductName", "Zzen\0"
-   VALUE "ProductVersion", "0.1\0"
+   VALUE "ProductVersion", "0.2\0"
    VALUE "OriginalFilename", "Zzen.exe\0"
   END
  END
