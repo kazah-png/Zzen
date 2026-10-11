@@ -38,7 +38,7 @@ Keep the game visible and focused. Switching windows pauses Zzen; **Resume** con
 
 **For the best farming results, use a strong, well-equipped in-game team suited to your chosen opponent and difficulty.** Zzen repeats matches in Commander mode; your squad, equipment, tactics and team passives still determine how well it performs. Play a trial match in Commander mode before starting a long session, and choose a difficulty your team can beat consistently. No lineup guarantees every win.
 
-### Example: the author's REAL BETIS squad
+### Example: the author's level 99 squad
 
 The screenshots below show the author's level **99** squad as a reference, not a required roster. Formation, team configuration and tactic names below are English translations of the Spanish labels in the screenshots.
 
@@ -55,7 +55,7 @@ The screenshots below show the author's level **99** squad as a reference, not a
 | Goalkeeper | Mark Evans |
 | Tactics | Flame Fortress, Unyielding Suppression, Shell Formation |
 
-![Author's level 99 REAL BETIS squad and 5-4-1 formation](docs/example-team.png)
+![Author's level 99 squad and 5-4-1 formation, with personal names blurred](docs/example-team.png)
 
 The accompanying passive setup includes **+90% tension when winning a focus or contest**, **+10% wall DF until the team is fouled**, and a **+8% team shot AT bonus for 30 seconds after regaining possession without a direct catch**. These are the values shown in this example; use the screenshots to compare your own setup, and check its performance against the actual match conditions.
 
