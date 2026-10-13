@@ -35,5 +35,12 @@ int main(){
  assert(classify(r,true)==Screen::Experience);
  r={};r.text=L"Elige un equipo al que enfrentarte.";
  assert(classify(r)==Screen::TeamList);
+ assert(difficultyId(L"BATALLA DE PUERTA")==6);
+ assert(difficultyId(L"BATALLA DE PUERTA+")==7);
+ assert(difficultyId(L"BATALLA LEGENDARIA")==5);
+ assert(difficultyId(L"BATALLA HEROICA+")==4);
+ assert(difficultyId(L"Guardar")==-1);
+ r={};r.text=L"BATALLA LEGENDARIA Guardar";r.lines.push_back({L"Guardar",.2,.696,.07,.02});assert(classify(r)==Screen::Difficulty);
+ r.lines.push_back({L"BATALLA DE PUERTA+",.14,.558,.18,.034});assert(difficultyLine(r,7));assert(!difficultyLine(r,3));
  std::cout<<"OK: limites, resultados y clasificacion de pantallas\n";
 }

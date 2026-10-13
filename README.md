@@ -18,7 +18,7 @@ A native C++ desktop app for repeating **Chronicle matches** in Inazuma Eleven: 
 
 - Match selection by category, opponent, occurrence and difficulty.
 - A fixed match count or unlimited repetition.
-- An initial catalog of 131 entries across eight categories, refreshable from the game.
+- A catalog of 147 entries across nine categories, including Heroes' Victory Road and Gate/Gate+ battles, refreshable from the game.
 - Start, pause, resume and **F8** to stop.
 - Session results and win/loss counters.
 - Diagnostics with screenshots, recognized text and recent actions.

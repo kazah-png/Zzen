@@ -11,6 +11,9 @@ inline const std::map<std::wstring,std::array<std::wstring,6>>& catalog(){
  static const auto data=[] {
   std::map<std::wstring,std::array<std::wstring,6>> out;
   const wchar_t* rows[]={
+   L"Puerta|Gate|ゲート|大门|Porte|द्वार",
+   L"Puerta+|Gate+|ゲート+|大门+|Porte+|द्वार+",
+   L"Tasas de aparición|Appearance rates|出現率|出现率|Taux d’apparition|प्राप्ति दर",
    L"Sesión|Session|セッション|会话|Session|सत्र",
    L"Diagnóstico|Diagnostics|診断|诊断|Diagnostic|निदान",
    L"Cómo usar Zzen|Getting started|使い方|使用指南|Bien démarrer|शुरुआत करें",

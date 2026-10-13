@@ -29,3 +29,25 @@ The 0.2 interface preserves that navigation engine. Display languages do not cha
 **The game must be set to Spanish.** Recognition uses keyboard/mouse controls and a 1920 × 1080 reference. Not every opponent, difficulty, score, resolution or Windows font configuration has been tested.
 
 Unlimited repetition is covered by engine tests; this is not a multi-day unattended reliability test. Raw game text and opponent names stay in Spanish. Windows builds and automated tests also run through GitHub Actions.
+
+## Chronicle start regression: October 12, 2026
+
+The shared opponent-selection routine required the first row to be highlighted before it considered the list to be at the top. A stationary mouse could keep the fourth row highlighted while the scrollbar was already at the beginning, causing repeated upward scrolling.
+
+The routine now checks the scrollbar position over two readable frames, independently of the highlighted row. It limits unsuccessful scroll attempts to 24. Empty OCR pages cannot confirm the beginning. Regression tests cover a hovered fourth row, a lower page with its first row highlighted, missing scrollbar, bounded retries and repeated opponent occurrences.
+
+Both Free and Premium passed the engine test against the actual private screenshot and Windows OCR: Brain is selected while Wild is highlighted. All four Free suites and all nine Premium suites passed. The source change is shared; Premium-only code and protection remain outside this repository.
+The live check also exposed an immediate pause when the pre-match opponent heading was missed by full-screen OCR. Both editions now read an enlarged opponent banner and allow 12 seconds for verification before pausing; no start input is sent without the configured opponent name. Tests reject missing names, verify bounded waiting and pass against the actual Brain pre-match screenshot.
+Live Premium verification: selected Brain and Heroic from the list; the final build verified Brain, confirmed the match, advanced presentation and exited formation editing to reach kickoff. Free uses the same fixes and passed all four suites plus both actual screenshot regressions; a full live Free match was not repeated.
+
+## Chronicle expansion: October 13, 2026
+
+Released as **0.3.0**. The four automated suites passed on the release source, including the optional private Royal Academy screenshot regression. The distributed ZIP contains only the application, public catalog, license and documentation; profiles, diagnostics, game captures and Premium data are excluded.
+
+The shared catalog now includes the ninth category, Heroes' Victory Road, and its five gate opponents (147 entries in total). Free and Premium use the same category spacing, short-list handling, verified gate-menu anchors and Puerta/Puerta+ difficulty IDs. Existing difficulty IDs and saved profiles remain compatible.
+
+Arrow navigation uses extended virtual-key events; ordinary gameplay shortcuts retain their existing scan-code handling. Tests cover the input flags, missing difficulty labels, gate selection, route-map continuation and all previous result/rematch regressions. All four Free suites pass. A full live Free match has not been repeated for this catalog update.
+
+The actual Royal Academy six-difficulty screenshot is also checked: all six menu rows must be located at their observed positions, including labels missed by OCR. The fallback requires matching squad, save, legendary and unusual-item anchors. All four Free suites pass with this fixture.
+
+The live catalog refresh found eleven additional Orion entries. It also exposed a narrower heading boundary that rejected the long Heroes' Victory Road title, and prefix matching that could confuse Inazuma Eleven with its sequels when refreshing the selector. Both editions now accept the observed heading position and select exact category/opponent names. The catalog contains 147 match occurrences; repeated opponents in different positions remain distinct matches.

@@ -9,7 +9,7 @@ static Reading reading(std::wstring text,std::wstring button=L"",double x=.7,dou
 }
 static void ready(Engine& e){e.lastAction=Clock::now()-std::chrono::seconds(5);testInputs.clear();}
 int wmain(int argc,wchar_t** argv){
-    if(argc!=2)return 2;winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    if(argc<2||argc>4)return 2;winrt::init_apartment(winrt::apartment_type::multi_threaded);
     Gdiplus::GdiplusStartupInput gi;ULONG_PTR token;Gdiplus::GdiplusStartup(&token,&gi,nullptr);
     store=std::make_unique<Store>(argv[1]);store->config.count=2;active=true;
     Engine e;FakeVision vision;Image image(1920,1080);e.reset(1);
@@ -90,6 +90,66 @@ int wmain(int argc,wchar_t** argv){
     // A paused engine cannot send an action.
     paused=true;bool rejected=false;try{ready(e);e.tick(image,formation,vision);}catch(...){rejected=true;}
     assert(rejected&&testInputs.empty());paused=false;
+    // Regression: first page with fourth row hovered used to scroll forever.
+    Image listImage(1920,1080);std::fill(listImage.pixels.begin(),listImage.pixels.end(),static_cast<unsigned char>(0));
+    for(int y=286;y<695;++y){auto p=listImage.at(909,y);p[0]=p[1]=p[2]=255;}
+    auto hoverPixel=listImage.at(int(1920*.31),515);hoverPixel[0]=220;hoverPixel[1]=90;hoverPixel[2]=0;
+    Reading firstPage;firstPage.text=L"Elige un equipo al que enfrentarte";
+    firstPage.lines={{L"Royal Academy",.062,.277,.2,.03},{L"Wild",.062,.467,.15,.03},{L"Brain",.062,.53,.15,.03}};
+    e.reset(1);e.cfg.team=L"Brain";e.cfg.occurrence=1;e.tabReady=true;active=true;
+    ready(e);assert(e.selection(listImage)==3);e.selectTeam(listImage,firstPage);assert(testInputs.empty());
+    ready(e);e.selectTeam(listImage,firstPage);assert(e.topPass==2&&testInputs==std::vector<std::wstring>{L"click"});
+    assert(debug.action==L"Seleccionar Brain · aparición 1");
+    // Being on the first highlighted row of a lower page does not imply top.
+    e.clearPage();std::fill(listImage.pixels.begin(),listImage.pixels.end(),static_cast<unsigned char>(0));
+    for(int y=450;y<750;++y){auto p=listImage.at(909,y);p[0]=p[1]=p[2]=255;}
+    auto row0=listImage.at(int(1920*.31),311);row0[0]=220;row0[1]=90;
+    ready(e);assert(!e.atTop(listImage,firstPage));assert(testInputs==std::vector<std::wstring>{L"scroll:600"});
+    // No scrollbar/blank captures cannot declare top and retries are bounded.
+    e.clearPage();Image blank(1920,1080);
+    for(int i=0;i<24;++i){ready(e);assert(!e.atTop(blank,firstPage));}
+    ready(e);bool bounded=false;try{e.atTop(blank,firstPage);}catch(const std::runtime_error&){bounded=true;}
+    assert(bounded&&testInputs.empty()&&e.topPass!=2);
+    // Duplicate occurrences continue to resolve from the complete first page.
+    e.clearPage();e.topPass=2;e.cfg.team=L"Royal Academy";e.cfg.occurrence=2;
+    firstPage.lines.push_back({L"Royal Academy",.062,.65,.2,.03});
+    ready(e);e.selectTeam(listImage,firstPage);assert(testInputs.size()==1&&debug.y>.65);
+    // A transitional/missing opponent heading waits without starting a match.
+    e.reset(1);e.cfg.team=L"Brain";auto preMatch=reading(L"Empezar partido",L"Empezar partido",.4,.9);
+    ready(e);e.tick(image,preMatch,vision);assert(testInputs.empty()&&!e.inMatch);
+    e.entered=Clock::now()-std::chrono::seconds(13);ready(e);bool unverified=false;
+    try{e.tick(image,preMatch,vision);}catch(const std::runtime_error&){unverified=true;}
+    assert(unverified&&testInputs.empty());
+    preMatch.text=L"Brain Empezar partido";ready(e);e.tick(image,preMatch,vision);assert(testInputs.size()==1);
+    if(argc>=3){
+        Vision realVision;auto captured=Image::load(argv[2]);auto actual=realVision.observe(captured);
+        assert(classify(actual)==Screen::TeamList);
+        e.clearPage();e.cfg.team=L"Brain";e.cfg.occurrence=1;e.tabReady=true;
+        ready(e);e.selectTeam(captured,actual);assert(testInputs.empty());
+        ready(e);e.selectTeam(captured,actual);assert(testInputs==std::vector<std::wstring>{L"click"});
+        assert(debug.action==L"Seleccionar Brain · aparición 1"&&debug.y>.50&&debug.y<.58);
+        std::cout<<"OK: actual Chronicle screenshot/OCR selects Brain while Wild is hovered\n";
+    }
+    if(argc==4){
+        Vision realVision;auto captured=Image::load(argv[3]);auto actual=realVision.observe(captured);
+        std::cout<<"PREMATCH OCR: "<<winrt::to_string(actual.text)<<"\n";
+        assert(classify(actual)==Screen::PreMatch&&has(actual.text,L"Brain"));
+        e.reset(1);e.cfg.team=L"Brain";ready(e);e.tick(captured,actual,realVision);assert(testInputs.size()==1);
+        std::cout<<"OK: actual Brain pre-match banner verified before starting\n";
+    }
     std::cout<<"OK: navigation, formation exit, single counting, rematch, finite/infinite, observation, stale results, pause\n";
+    {Reading category;category.lines={{L"Inazuma Eleven: Heroes' Victory Road",.113,.22,.24,.03}};assert(e.readCategory(category)==category.lines[0].text);}
+    assert(keyInput(VK_DOWN).ki.dwFlags&KEYEVENTF_EXTENDEDKEY);assert(keyInput(VK_UP).ki.dwFlags&KEYEVENTF_EXTENDEDKEY);assert(!(keyInput('X').ki.dwFlags&KEYEVENTF_EXTENDEDKEY));
+    active=true;paused=false;e.reset(1);e.targetOnMap=true;ready(e);
+    e.tick(image,reading(L"Lista de equipos"),vision);assert(testInputs==std::vector<std::wstring>{L"click"});
+    e.cfg.team=L"Tormenta cortante";e.cfg.difficulty=7;Reading gate;
+    gate.text=L"Tormenta cortante BATALLA DE PUERTA+ Guardar";
+    gate.lines={{L"Guardar",.2,.696,.08,.02},{L"BATALLA DE PUERTA+",.14,.56,.18,.035}};
+    ready(e);e.tick(image,gate,vision);assert(testInputs==std::vector<std::wstring>{L"click"});
+    e.cfg.difficulty=3;ready(e);e.tick(image,gate,vision);assert(testInputs.empty());
+    if(auto fixture=fs::path(argv[1]).parent_path().parent_path()/L"tests/private/royal-chronicle.png";fs::exists(fixture)){Vision real;
+     auto actual=real.observe(Image::load(fixture));assert(classify(actual)==Screen::Difficulty);
+     for(int id=0;id<6;++id){auto choice=difficultyLine(actual,id);assert(choice);assert(std::abs(choice->y+choice->h/2-(513.+70*id)/1080)<.02);}
+     std::cout<<"OK: all six classic difficulties in actual Royal Academy screenshot\n";}
     store.reset();Gdiplus::GdiplusShutdown(token);winrt::uninit_apartment();
 }

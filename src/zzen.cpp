@@ -1,4 +1,5 @@
 #include <windows.h>
+#include "keyboard.hpp"
 #include <commctrl.h>
 #include <shellapi.h>
 #include <commdlg.h>
@@ -27,7 +28,7 @@ static void ensureInput(){}
 #else
 static void ensureInput(){if(!active||paused||quitting)throw std::runtime_error("Sesión pausada o detenida");if(!gameWindow||GetForegroundWindow()!=gameWindow||IsIconic(gameWindow))throw std::runtime_error("El juego perdió el foco. Pulsa Reanudar.");}
 static void send(INPUT i){if(SendInput(1,&i,sizeof i)!=1)throw std::runtime_error("Windows no ha aceptado la entrada");}
-static void key(WORD vk){ensureInput();INPUT i{};i.type=INPUT_KEYBOARD;i.ki.wScan=(WORD)MapVirtualKeyW(vk,MAPVK_VK_TO_VSC);i.ki.dwFlags=KEYEVENTF_SCANCODE;send(i);std::this_thread::sleep_for(std::chrono::milliseconds(110));i.ki.dwFlags|=KEYEVENTF_KEYUP;send(i);}
+static void key(WORD vk){ensureInput();INPUT i=keyInput(vk);send(i);std::this_thread::sleep_for(std::chrono::milliseconds(110));i.ki.dwFlags|=KEYEVENTF_KEYUP;send(i);}
 static void click(double x,double y){ensureInput();RECT r;GetClientRect(gameWindow,&r);POINT p{};ClientToScreen(gameWindow,&p);SetCursorPos(p.x+int(x*r.right),p.y+int(y*r.bottom));INPUT i{};i.type=INPUT_MOUSE;i.mi.dwFlags=MOUSEEVENTF_LEFTDOWN;send(i);std::this_thread::sleep_for(std::chrono::milliseconds(110));i.mi.dwFlags=MOUSEEVENTF_LEFTUP;send(i);if(GetForegroundWindow()==gameWindow)SetCursorPos(p.x+r.right-8,p.y+8);}
 static void scroll(int amount){ensureInput();RECT r;GetClientRect(gameWindow,&r);POINT p{};ClientToScreen(gameWindow,&p);SetCursorPos(p.x+r.right/4,p.y+r.bottom/2);INPUT i{};i.type=INPUT_MOUSE;i.mi.dwFlags=MOUSEEVENTF_WHEEL;i.mi.mouseData=DWORD(amount);send(i);}
 #endif
@@ -35,7 +36,7 @@ static void stop(const std::wstring& reason){active=false;paused=false;requestMo
 static void evidence(const Image& im,const Reading&r,const std::wstring& id,const std::wstring& kind){if(kind!=L"resultado-pendiente")return;auto dir=store->root/L"captures"/id;fs::create_directories(dir);auto p=dir/(stamp(true)+L"-"+kind);im.save(p.wstring()+L".png");writeText(p.wstring()+L".txt",r.text);}
 struct Engine{
  Config cfg;int finished=0,mode=1,scrolls=0,stalePages=0,topPass=0;bool inMatch=false,recorded=false,commander=false,awaitingNew=false,scoreTimedOut=false;std::wstring id,lastPage,lastReward;size_t current=0;Clock::time_point entered=Clock::now(),matchStart=Clock::now(),lastAction=Clock::now()-std::chrono::seconds(10),newMatchAt=Clock::now();Screen previous=Screen::Unknown;std::vector<std::wstring> scanned;
- void reset(int m){std::lock_guard lock(dataMutex);cfg=store->config;mode=m;if(m==1)store->history.clear();finished=0;inMatch=false;recorded=false;commander=false;awaitingNew=false;scoreTimedOut=false;current=0;id.clear();scrolls=stalePages=topPass=0;scanned.clear();lastPage.clear();lastReward.clear();previous=Screen::Unknown;entered=matchStart=Clock::now();lastAction=Clock::now()-std::chrono::seconds(10);debug.finished=0;categoryIndex=categoryChanges=0;tabReady=false;category.clear();lastSelection.clear();completedCategories.clear();}
+ void reset(int m){std::lock_guard lock(dataMutex);cfg=store->config;mode=m;if(m==1)store->history.clear();finished=0;inMatch=false;recorded=false;commander=false;awaitingNew=false;scoreTimedOut=false;current=0;id.clear();scrolls=stalePages=topPass=0;scanned.clear();lastPage.clear();lastReward.clear();previous=Screen::Unknown;entered=matchStart=Clock::now();lastAction=Clock::now()-std::chrono::seconds(10);debug.finished=0;categoryIndex=categoryChanges=0;tabReady=false;targetOnMap=false;category.clear();lastSelection.clear();completedCategories.clear();}
  void begin(){if(inMatch)return;inMatch=true;recorded=false;scoreTimedOut=false;id=stamp(true);matchStart=Clock::now();lastReward.clear();}
  bool action(std::wstring text,std::function<void()> fn,double x=-1,double y=-1){if(Clock::now()-lastAction<std::chrono::milliseconds(1600))return false;{std::lock_guard lock(dataMutex);debug.action=text;debug.x=x;debug.y=y;}logText(L"ACCIÓN · "+text);fn();lastAction=Clock::now();return true;}
  bool tap(const Line* line,std::wstring description){if(!line)return false;double x=line->x+line->w/2,y=line->y+line->h/2;return action(description,[=]{click(x,y);},x,y);}
@@ -80,10 +81,12 @@ struct Engine{
   if(screen==Screen::Kickoff){if(find(r,L"modo manual",.7,1,0,.45)||find(r,L"modo comandante",.7,1,.6))commander=true;if(!commander){action(L"Activar Comandante · U",[&]{key('U');commander=true;});}else tap(find(r,L"saque de centro",.7),L"Realizar saque");return;}
   if(screen==Screen::Playing){if(find(r,L"modo manual",.7,1,0,.45)||find(r,L"modo comandante",.7,1,.6))commander=true;else if(find(r,L"modo comandante",.7,1,0,.45))action(L"Activar Comandante · U",[&]{key('U');commander=true;});status(L"Jugando · "+cfg.team);return;}
   if(screen==Screen::RouteMenu){action(L"Cerrar menú de ruta",[]{key(VK_ESCAPE);});return;}
+  if(screen==Screen::DropRates){action(L"Cerrar tasas de aparición",[]{key(VK_ESCAPE);});return;}
+  if(screen==Screen::RouteMap&&targetOnMap){action(L"Abrir rival localizado",[]{click(.5,.5);});return;}
   if(screen==Screen::RouteMap){inMatch=false;action(L"Abrir lista de equipos · V",[]{key('V');});return;}
   if(screen==Screen::TeamList){selectTeam(im,r);return;}
-  if(screen==Screen::Difficulty){if(!has(r.text,cfg.team))throw std::runtime_error("El rival de la pantalla no coincide con la selección.");double y=(511+70*cfg.difficulty)/1080.;action(L"Elegir "+difficultyName(cfg.difficulty),[=]{click(.23,y);},.23,y);return;}
-  if(screen==Screen::PreMatch){if(!has(r.text,cfg.team))throw std::runtime_error("No se ha verificado el nombre del rival.");const Line* yes=nullptr;for(auto&l:r.lines)if(norm(trim(l.text))==L"si"&&l.y>.5&&l.x<.5){yes=&l;break;}if(yes){if(now-lastAction<std::chrono::milliseconds(1600))return;tap(yes,L"Confirmar partido");begin();commander=false;}else tap(find(r,L"empezar",.75),L"Empezar partido");return;}
+  if(screen==Screen::Difficulty){if(!has(r.text,cfg.team))throw std::runtime_error("El rival de la pantalla no coincide con la selección.");targetOnMap=false;auto choice=difficultyLine(r,cfg.difficulty);if(!choice){status(L"Dificultad no disponible o ilegible · "+difficultyName(cfg.difficulty));return;}tap(choice,L"Elegir "+difficultyName(cfg.difficulty));return;}
+  if(screen==Screen::PreMatch){if(!has(r.text,cfg.team)){if(now-entered<std::chrono::seconds(12)){status(L"Esperando · "+label(Screen::PreMatch));return;}throw std::runtime_error("No se ha verificado el nombre del rival.");}const Line* yes=nullptr;for(auto&l:r.lines)if(norm(trim(l.text))==L"si"&&l.y>.5&&l.x<.5){yes=&l;break;}if(yes){if(now-lastAction<std::chrono::milliseconds(1600))return;tap(yes,L"Confirmar partido");begin();commander=false;}else tap(find(r,L"empezar",.75),L"Empezar partido");return;}
   status(L"Esperando · "+label(screen));
  }
  #include "catalog_engine.inc"

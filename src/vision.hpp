@@ -24,7 +24,32 @@ class Vision{
 public:
  Vision(){engine=winrt::Windows::Media::Ocr::OcrEngine::TryCreateFromUserProfileLanguages();if(!engine)throw std::runtime_error("Activa un idioma de reconocimiento de texto de Windows.");}
  Reading read(const Image& im){using namespace winrt::Windows;auto buffer=Security::Cryptography::CryptographicBuffer::CreateFromByteArray(im.pixels);Graphics::Imaging::SoftwareBitmap bitmap(Graphics::Imaging::BitmapPixelFormat::Bgra8,im.width,im.height,Graphics::Imaging::BitmapAlphaMode::Ignore);bitmap.CopyFromBuffer(buffer);auto result=engine.RecognizeAsync(bitmap).get();Reading r;for(auto l:result.Lines()){Line line;line.text=l.Text();double left=im.width,top=im.height,right=0,bottom=0;for(auto word:l.Words()){auto rect=word.BoundingRect();left=std::min(left,double(rect.X));top=std::min(top,double(rect.Y));right=std::max(right,double(rect.X+rect.Width));bottom=std::max(bottom,double(rect.Y+rect.Height));}line.x=left/im.width;line.y=top/im.height;line.w=(right-left)/im.width;line.h=(bottom-top)/im.height;r.lines.push_back(line);r.text+=line.text+L"\n";}return r;}
- Reading observe(const Image& im){auto r=read(im);auto bottom=read(im.crop(0,.875,1,.125));r.bottom=bottom.text;for(auto l:bottom.lines){l.y=.875+l.y*.125;l.h*=.125;r.lines.push_back(l);}r.text+=L"\n[Franja inferior]\n"+r.bottom;if(has(r.text,L"elige un equipo al que")){std::erase_if(r.lines,[](const Line& l){return l.x<.48&&l.y>.21&&l.y<.85;});auto list=read(im.crop(.057,.213,.32,.614,1000));for(auto l:list.lines){l.x=.057+l.x*.32;l.y=.213+l.y*.614;l.w*=.32;l.h*=.614;r.lines.push_back(l);}r.text+=L"\n[Lista ampliada]\n"+list.text;}return r;}
+ Reading observe(const Image& im){auto r=read(im);
+ if(find(r,L"guardar",.68,1,0,.45)){
+  auto opponent=read(im.crop(.43,.30,.18,.09,1000));r.text+=L"\n[Chronicle opponent]\n"+opponent.text;
+  auto menu=read(im.crop(.09,.43,.28,.42,1150));
+  for(auto l:menu.lines){l.x=.09+l.x*.28;l.y=.43+l.y*.42;l.w*=.28;l.h*=.42;r.lines.push_back(l);}r.text+=L"\n[Difficulty menu]\n"+menu.text;
+  // Stylized gate titles can be unreadable. Verify the three-row gate layout
+  // with text anchors before deriving its two known entries from row spacing.
+  auto save=find(r,L"guardar",.68,1,0,.45);auto legend=find(r,L"legendaria",.5,.8,0,.4);auto squad=find(r,L"plantilla de",.38,.52,0,.4);
+  if(save&&legend&&squad&&(has(r.text,L"puert")||(has(r.text,L"camino")&&has(r.text,L"desafios")))){
+   double end=save->y+save->h/2;double step=(end-(squad->y+squad->h/2))/4;
+   if(step>.05&&step<.08&&std::abs(end-step-(legend->y+legend->h/2))<.015){double center=end-step;
+    r.lines.insert(r.lines.begin(),{L"BATALLA DE PUERTA+",.14,center-step-.017,.18,.034});
+    r.lines.insert(r.lines.begin(),{L"BATALLA DE PUERTA",.14,center-2*step-.017,.18,.034});
+   }
+  }else if(save&&legend&&squad&&has(r.text,L"inusuales")){
+   // Six-difficulty Chronicle layout: verify all anchors before deriving rows.
+   double end=save->y+save->h/2;double step=(end-(squad->y+squad->h/2))/7;
+   auto unusual=find(r,L"inusuales",.5,.7,0,.4);
+   if(step>.05&&step<.08&&std::abs(end-step-(legend->y+legend->h/2))<.02&&unusual&&std::abs(end-4*step-(unusual->y+unusual->h/2))<.02){
+    const wchar_t* names[]={L"BATALLA DE CRÓNICA",L"BATALLA DE DESBLOQUEO DE RUTA",L"BATALLA DE OBJETOS INUSUALES",L"BATALLA HEROICA",L"BATALLA HEROICA+",L"BATALLA LEGENDARIA"};
+    for(int d=0;d<6;++d)r.lines.insert(r.lines.begin(),{names[d],.14,end-(6-d)*step-.017,.18,.034});
+   }
+  }
+
+ }
+auto bottom=read(im.crop(0,.875,1,.125));r.bottom=bottom.text;for(auto l:bottom.lines){l.y=.875+l.y*.125;l.h*=.125;r.lines.push_back(l);}r.text+=L"\n[Franja inferior]\n"+r.bottom;if(has(r.text,L"elige un equipo al que")){std::erase_if(r.lines,[](const Line& l){return l.x<.48&&l.y>.21&&l.y<.85;});auto list=read(im.crop(.057,.213,.32,.614,1000));for(auto l:list.lines){l.x=.057+l.x*.32;l.y=.213+l.y*.614;l.w*=.32;l.h*=.614;r.lines.push_back(l);}r.text+=L"\n[Lista ampliada]\n"+list.text;}if(classify(r)==Screen::PreMatch){auto rival=read(im.crop(.615,.151,.265,.077,1200));r.text+=L"\n[Rival ampliado]\n"+rival.text;for(auto l:rival.lines){l.x=.615+l.x*.265;l.y=.151+l.y*.077;l.w*=.265;l.h*=.077;r.lines.push_back(l);}}return r;}
  std::optional<int> digit(const Image& im,int side){auto crop=im.crop(side==0?550./1920:1090./1920,140./1080,side==0?280./1920:300./1920,250./1080,side==0?280:300);int w=crop.width,h=crop.height;std::vector<bool> mask(w*h),ink(w*h);for(int y=0;y<h;y++)for(int x=0;x<w;x++){auto c=crop.at(x,y);int b=c[0],g=c[1],red=c[2];mask[y*w+x]=side==0?(b>100&&g>100&&red<g*.8&&red<b*.8):(red>100&&red>g*1.3&&red>b*1.3);}
   int top=h,bottom=0,left=w,right=0;for(int y=0;y<h;y++)for(int x=0;x<w;x++){for(int dy=-2;dy<=2&&!ink[y*w+x];dy++)for(int dx=-2;dx<=2;dx++){int xx=x+dx,yy=y+dy;if(xx>=0&&xx<w&&yy>=0&&yy<h&&mask[yy*w+xx])ink[y*w+x]=true;}if(ink[y*w+x]){top=std::min(top,y);bottom=std::max(bottom,y);left=std::min(left,x);right=std::max(right,x);}}
   if(bottom-top<70||right-left<20)return {};bool zero=false;std::vector<bool> seen(w*h);for(int y=0;y<h;y++)for(int x=0;x<w;x++){int i=y*w+x;if(seen[i]||ink[i])continue;std::queue<int> q;q.push(i);seen[i]=true;int lx=w,rx=0,ty=h,by=0;bool edge=false;std::vector<int> points;while(!q.empty()){int p=q.front();q.pop();points.push_back(p);int px=p%w,py=p/w;lx=std::min(lx,px);rx=std::max(rx,px);ty=std::min(ty,py);by=std::max(by,py);edge|=px==0||py==0||px==w-1||py==h-1;int dx[4]={1,-1,0,0},dy[4]={0,0,1,-1};for(int j=0;j<4;j++){int xx=px+dx[j],yy=py+dy[j];if(xx>=0&&xx<w&&yy>=0&&yy<h&&!seen[yy*w+xx]&&!ink[yy*w+xx]){seen[yy*w+xx]=true;q.push(yy*w+xx);}}}if(!edge){double center=(ty+by)/2.;if(by-ty>(bottom-top)*.55&&rx-lx>(right-left)*.2&&center>top+(bottom-top)*.35&&center<top+(bottom-top)*.65)zero=true;if(points.size()<300)for(int p:points)ink[p]=true;}}

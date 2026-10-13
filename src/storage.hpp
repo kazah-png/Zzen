@@ -63,7 +63,7 @@ struct Store {
         auto o=loadObj(root/L"data"/L"profile.json");
         config.team=js(o,L"team",L"Royal Academy");
         config.route=js(o,L"route",L"Inazuma Eleven");
-        config.difficulty=boundedNumber(o,L"difficulty",3,0,5);
+        config.difficulty=boundedNumber(o,L"difficulty",3,0,7);
         config.count=boundedNumber(o,L"count",1,1,100000);
         config.occurrence=boundedNumber(o,L"occurrence",1,1,20);
         config.language=boundedNumber(o,L"language",0,0,5);
@@ -73,7 +73,7 @@ struct Store {
             if(value.ValueType()!=JsonValueType::Object) continue;
             auto j=value.GetObject(); auto route=js(j,L"route"),team=js(j,L"team");
             if(route.empty()||team.empty())continue;
-            catalog.push_back({route,team,boundedNumber(j,L"occurrence",1,1,20),boundedNumber(j,L"tab",0,0,7)});
+            catalog.push_back({route,team,boundedNumber(j,L"occurrence",1,1,20),boundedNumber(j,L"tab",0,0,8)});
         }
     }
     void profile() {
@@ -98,7 +98,7 @@ struct Store {
     }
 };
 inline std::wstring difficultyName(int i) {
-    static const wchar_t* names[]={L"Crónica",L"Desbloqueo de ruta",L"Objetos inusuales",L"Heroica",L"Heroica +",L"Legendaria"};
-    return names[std::clamp(i,0,5)];
+    static const wchar_t* names[]={L"Crónica",L"Desbloqueo de ruta",L"Objetos inusuales",L"Heroica",L"Heroica +",L"Legendaria",L"Puerta",L"Puerta +"};
+    return names[std::clamp(i,0,7)];
 }
 }

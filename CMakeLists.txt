@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(Zzen VERSION 0.2.2 LANGUAGES CXX RC)
+project(Zzen VERSION 0.3.0 LANGUAGES CXX RC)
 if(NOT WIN32 OR NOT MSVC)
   message(FATAL_ERROR "Zzen requires Windows, MSVC and Windows SDK with C++/WinRT")
 endif()

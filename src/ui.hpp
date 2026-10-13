@@ -36,7 +36,7 @@ void catalogUI(){
     for(auto& s:routes)SendMessageW(routeBox,CB_ADDSTRING,0,(LPARAM)s.c_str());
     for(auto& s:teams)SendMessageW(teamBox,CB_ADDSTRING,0,(LPARAM)s.c_str());
     if(!teams.empty()&&!teams.contains(team))team=*teams.begin();
-    SendMessageW(routeBox,CB_SELECTSTRING,WPARAM(-1),(LPARAM)route.c_str());SendMessageW(teamBox,CB_SELECTSTRING,WPARAM(-1),(LPARAM)team.c_str());
+    SendMessageW(routeBox,CB_SETCURSEL,SendMessageW(routeBox,CB_FINDSTRINGEXACT,WPARAM(-1),(LPARAM)route.c_str()),0);SendMessageW(teamBox,CB_SETCURSEL,SendMessageW(teamBox,CB_FINDSTRINGEXACT,WPARAM(-1),(LPARAM)team.c_str()),0);
 }
 void saveConfig(){
     Config c;c.language=i18n::language;c.route=trim(value(routeBox));c.team=trim(value(teamBox));
@@ -176,7 +176,7 @@ void localize(){
     for(auto& [h,key]:captions)if(h!=countBox&&h!=occBox&&h!=details&&h!=statusBox)text(h,key);
     text(GetDlgItem(mainWindow,3),tr(L"Solo Crónica")+L"\r\n"+tr(L"F8 detiene la sesión"));
     int diff=int(SendMessageW(diffBox,CB_GETCURSEL,0,0));SendMessageW(diffBox,CB_RESETCONTENT,0,0);
-    for(int i=0;i<6;++i){auto t=tr(difficultyName(i));SendMessageW(diffBox,CB_ADDSTRING,0,(LPARAM)t.c_str());}SendMessageW(diffBox,CB_SETCURSEL,diff<0?3:diff,0);
+    for(int i=0;i<8;++i){auto t=tr(difficultyName(i));SendMessageW(diffBox,CB_ADDSTRING,0,(LPARAM)t.c_str());}SendMessageW(diffBox,CB_SETCURSEL,diff<0?3:diff,0);
     const wchar_t* names[]={L"Fecha",L"Rival",L"Dificultad",L"Resultado",L"Marcador"};
     for(int i=0;i<5;++i){auto t=tr(names[i]);LVCOLUMNW c{};c.mask=LVCF_TEXT;c.pszText=t.data();ListView_SetColumn(historyList,i,&c);}
     text(GetDlgItem(mainWindow,220),i18n::help());historyKey=L"!";showPage();refresh();showRecord();InvalidateRect(mainWindow,nullptr,TRUE);
@@ -200,7 +200,7 @@ void create(){
     smallFont=CreateFontW(-14,0,0,0,FW_NORMAL,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
     titleFont=CreateFontW(-30,0,0,0,FW_SEMIBOLD,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
     numberFont=CreateFontW(-29,0,0,0,FW_SEMIBOLD,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
-    auto brand=label(L"Zzen",1);SendMessageW(brand,WM_SETFONT,(WPARAM)titleFont,TRUE);label(L"FREE  /  0.2.2",2);label(L"Solo Crónica\r\nF8 detiene la sesión",3);
+    auto brand=label(L"Zzen",1);SendMessageW(brand,WM_SETFONT,(WPARAM)titleFont,TRUE);label(L"FREE  /  0.3.0",2);label(L"Solo Crónica\r\nF8 detiene la sesión",3);
     button(L"Sesión",10);button(L"Diagnóstico",11);button(L"Cómo usar Zzen",12);
     pageTitle=label(L"");SendMessageW(pageTitle,WM_SETFONT,(WPARAM)titleFont,TRUE);pageSubtitle=label(L"");SendMessageW(pageSubtitle,WM_SETFONT,(WPARAM)smallFont,TRUE);
     const wchar_t* fieldCaptions[]={L"Categoría",L"Rival",L"Dificultad",L"Partidos",L"Aparición del rival",L"El número distingue rivales repetidos en la ruta.",L"PARTIDOS DE ESTA SESIÓN"};
@@ -209,7 +209,7 @@ void create(){
     diffBox=control(L"COMBOBOX",L"",103,CBS_DROPDOWNLIST|CBS_OWNERDRAWFIXED|CBS_HASSTRINGS|WS_TABSTOP);countBox=control(L"EDIT",L"1",104,ES_NUMBER|WS_TABSTOP);occBox=control(L"EDIT",L"1",105,ES_NUMBER|WS_TABSTOP);
     infiniteBox=control(L"BUTTON",L"Sin límite",106,BS_AUTOCHECKBOX|WS_TABSTOP);SetWindowTheme(infiniteBox,L"",L"");
     for(auto h:{routeBox,teamBox,diffBox,countBox,occBox,infiniteBox})sessionControls.push_back(h);
-    for(int i=0;i<6;++i){auto s=tr(difficultyName(i));SendMessageW(diffBox,CB_ADDSTRING,0,(LPARAM)s.c_str());}
+    for(int i=0;i<8;++i){auto s=tr(difficultyName(i));SendMessageW(diffBox,CB_ADDSTRING,0,(LPARAM)s.c_str());}
     auto& c=store->config;SetWindowTextW(routeBox,c.route.c_str());SetWindowTextW(teamBox,c.team.c_str());SetWindowTextW(countBox,std::to_wstring(c.count).c_str());SetWindowTextW(occBox,std::to_wstring(c.occurrence).c_str());SendMessageW(diffBox,CB_SETCURSEL,c.difficulty,0);SendMessageW(infiniteBox,BM_SETCHECK,c.infinite?BST_CHECKED:BST_UNCHECKED,0);catalogUI();
     for(auto pair:{std::pair{110,L"Iniciar sesión"},std::pair{111,L"Pausar"},std::pair{112,L"Reanudar"},std::pair{113,L"Detener · F8"},std::pair{114,L"Actualizar catálogo"},std::pair{204,L"Corregir resultado"}})sessionControls.push_back(button(pair.second,pair.first));
     const wchar_t* names[]={L"COMPLETADOS",L"VICTORIAS",L"DERROTAS",L"EMPATES / PENDIENTES"};
@@ -284,7 +284,7 @@ int WINAPI wWinMain(HINSTANCE instance,HINSTANCE,PWSTR,int){
             store=std::make_unique<Store>(root);INITCOMMONCONTROLSEX ic{sizeof ic,ICC_WIN95_CLASSES};InitCommonControlsEx(&ic);
             WNDCLASSW wc{};wc.hInstance=instance;wc.hIcon=LoadIconW(instance,MAKEINTRESOURCEW(1));wc.hCursor=LoadCursorW(nullptr,IDC_ARROW);wc.hbrBackground=ui::background;wc.lpfnWndProc=ui::PreviewProc;wc.lpszClassName=L"ZzenPreview";RegisterClassW(&wc);
             wc.lpfnWndProc=ui::WindowProc;wc.lpszClassName=L"ZzenFree";RegisterClassW(&wc);
-            mainWindow=CreateWindowW(L"ZzenFree",L"Zzen · Free 0.2.2",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,1400,990,nullptr,nullptr,instance,nullptr);
+            mainWindow=CreateWindowW(L"ZzenFree",L"Zzen · Free 0.3.0",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,1400,990,nullptr,nullptr,instance,nullptr);
             BOOL dark=TRUE;DwmSetWindowAttribute(mainWindow,20,&dark,sizeof dark);ShowWindow(mainWindow,SW_SHOW);
             std::thread thread(worker);MSG msg;
             while(GetMessageW(&msg,nullptr,0,0)>0){if(!IsDialogMessageW(mainWindow,&msg)){TranslateMessage(&msg);DispatchMessageW(&msg);}}
