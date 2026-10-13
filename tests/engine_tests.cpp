@@ -151,5 +151,12 @@ int wmain(int argc,wchar_t** argv){
      auto actual=real.observe(Image::load(fixture));assert(classify(actual)==Screen::Difficulty);
      for(int id=0;id<6;++id){auto choice=difficultyLine(actual,id);assert(choice);assert(std::abs(choice->y+choice->h/2-(513.+70*id)/1080)<.02);}
      std::cout<<"OK: all six classic difficulties in actual Royal Academy screenshot\n";}
+    // Refresh preserves known spelling while retaining distinct repeat occurrences.
+    {store->catalog={{L"Inazuma Eleven",L"Brain",1,0},{L"Inazuma Eleven",L"Protocolo Omega 2.0",1,0}};
+     e.reset(2);e.tabReady=true;e.topPass=2;e.stalePages=3;Reading pageReading;
+     pageReading.lines={{L"Inazuma Eleven",.113,.22,.24,.03},{L"Braín",.062,.277,.2,.03},{L"Protocolo Omega 2,0",.062,.34,.2,.03},{L"Brain",.062,.40,.2,.03}};
+     Image pageImage(1920,1080);auto pixel=pageImage.at(int(1920*.31),311);pixel[0]=220;pixel[1]=90;pixel[2]=0;
+     e.lastSelection=e.signature(teams(pageReading))+L"#0";ready(e);e.scan(pageImage,pageReading,Screen::TeamList);
+     assert(store->catalog.size()==3&&store->catalog[0].team==L"Brain"&&store->catalog[1].team==L"Protocolo Omega 2.0"&&store->catalog[2].occurrence==2);}
     store.reset();Gdiplus::GdiplusShutdown(token);winrt::uninit_apartment();
 }
