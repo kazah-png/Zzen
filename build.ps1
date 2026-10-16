@@ -24,7 +24,7 @@ try {
  Copy-Item "$base/data/catalog.json" "$out/data/catalog.json" -Force
  if(Test-Path "$base/README.md"){Copy-Item "$base/README.md" "$out/README.md" -Force}
  if($Test -or $TestsOnly){
-  foreach($name in @('core_tests','storage_tests','engine_tests','i18n_tests')){
+  foreach($name in @('atomic_storage_tests','core_tests','storage_tests','engine_tests','i18n_tests')){
    & "$vc\bin\Hostx64\x64\cl.exe" /nologo /std:c++20 /EHsc /W4 /utf-8 /DUNICODE /D_UNICODE /DNOMINMAX /MT @inc "$base/tests/$name.cpp" "/Fo:$base/build/$name.obj" "/Fe:$base/build/$name.exe" /link @libs windowsapp.lib runtimeobject.lib gdiplus.lib user32.lib gdi32.lib ole32.lib
    if($LASTEXITCODE -ne 0){throw "Compilation failed: $name"}
    & "$base/build/$name.exe" "$base/build/test-data-$name"

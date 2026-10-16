@@ -13,6 +13,8 @@ int wmain(int argc,wchar_t** argv){
     Gdiplus::GdiplusStartupInput gi;ULONG_PTR token;Gdiplus::GdiplusStartup(&token,&gi,nullptr);
     store=std::make_unique<Store>(argv[1]);store->config.count=2;active=true;
     Engine e;FakeVision vision;Image image(1920,1080);e.reset(1);
+    assert(Engine::nameKey(L"EasÑvind")==Engine::nameKey(L"Eastwind"));
+    assert(Engine::nameKey(L"Eastwind")!=Engine::nameKey(L"West Manor"));
     e.tick(image,reading(L"Lista de equipos"),vision);assert(testInputs==std::vector<std::wstring>{L"key:86"});
     Reading formation;formation.bottom=L"Alt Terminar edición";ready(e);e.tick(image,formation,vision);assert(testInputs.size()==1&&e.inMatch);
     auto final=reading(L"RESULTADOS FIN DEL PARTIDO",L"Fin del partido");

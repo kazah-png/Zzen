@@ -20,6 +20,8 @@ int wmain(int argc,wchar_t** argv){
     Store invalid(root);assert(invalid.config.count==100000&&invalid.config.difficulty==0&&invalid.config.occurrence==1);
     first.catalog={{L"Inazuma Eleven",L"Royal Academy",1,0},{L"Inazuma Eleven",L"Royal Academy",2,0}};first.saveCatalog();
     Store catalog(root);assert(catalog.catalog.size()==2&&catalog.catalog[1].occurrence==2);
+    first.catalog.push_back({L"Inazuma Eleven: Heroes' Victory Road",L"EasÑvind",1,8});first.saveCatalog();
+    Store corrected(root);assert(corrected.catalog.size()==3&&corrected.catalog.back().team==L"Eastwind");
     std::cout<<"OK: session isolation, profile, backup recovery, bounds, duplicate rivals\n";
     winrt::uninit_apartment();
 }

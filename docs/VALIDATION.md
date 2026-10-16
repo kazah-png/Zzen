@@ -2,6 +2,10 @@
 
 ## Automated tests
 
+Version 0.3.1 adds real filesystem tests for a short-lived read lock, bounded failure under a persistent lock, recovery after the lock is released, and preservation of the previous data and backup. It also covers the observed Eastwind OCR spelling in saved catalogs and opponent matching.
+
+The bundled catalog contains 153 match occurrences across nine categories, checked against a full in-game catalog refresh on October 15, 2026. This catalog check is separate from validating a complete Commander match against every opponent. Premium appearance-rate collection is not included in Free.
+
 Screen classification, win/loss/draw outcomes, finite and unlimited repetition, session-only results, settings persistence and backup recovery, numeric bounds, duplicate opponents, formation exit, result deduplication, Rematch, Commander preservation, observation without input, stale results and paused-input rejection.
 
 Localization tests check six-language resource completeness, stable Spanish recognition and saved language preferences.

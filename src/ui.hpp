@@ -200,7 +200,7 @@ void create(){
     smallFont=CreateFontW(-14,0,0,0,FW_NORMAL,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
     titleFont=CreateFontW(-30,0,0,0,FW_SEMIBOLD,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
     numberFont=CreateFontW(-29,0,0,0,FW_SEMIBOLD,0,0,0,DEFAULT_CHARSET,0,0,CLEARTYPE_QUALITY,0,L"Segoe UI");
-    auto brand=label(L"Zzen",1);SendMessageW(brand,WM_SETFONT,(WPARAM)titleFont,TRUE);label(L"FREE  /  0.3.0",2);label(L"Solo Crónica\r\nF8 detiene la sesión",3);
+    auto brand=label(L"Zzen",1);SendMessageW(brand,WM_SETFONT,(WPARAM)titleFont,TRUE);label(L"FREE  /  0.3.1",2);label(L"Solo Crónica\r\nF8 detiene la sesión",3);
     button(L"Sesión",10);button(L"Diagnóstico",11);button(L"Cómo usar Zzen",12);
     pageTitle=label(L"");SendMessageW(pageTitle,WM_SETFONT,(WPARAM)titleFont,TRUE);pageSubtitle=label(L"");SendMessageW(pageSubtitle,WM_SETFONT,(WPARAM)smallFont,TRUE);
     const wchar_t* fieldCaptions[]={L"Categoría",L"Rival",L"Dificultad",L"Partidos",L"Aparición del rival",L"El número distingue rivales repetidos en la ruta.",L"PARTIDOS DE ESTA SESIÓN"};
@@ -284,7 +284,7 @@ int WINAPI wWinMain(HINSTANCE instance,HINSTANCE,PWSTR,int){
             store=std::make_unique<Store>(root);INITCOMMONCONTROLSEX ic{sizeof ic,ICC_WIN95_CLASSES};InitCommonControlsEx(&ic);
             WNDCLASSW wc{};wc.hInstance=instance;wc.hIcon=LoadIconW(instance,MAKEINTRESOURCEW(1));wc.hCursor=LoadCursorW(nullptr,IDC_ARROW);wc.hbrBackground=ui::background;wc.lpfnWndProc=ui::PreviewProc;wc.lpszClassName=L"ZzenPreview";RegisterClassW(&wc);
             wc.lpfnWndProc=ui::WindowProc;wc.lpszClassName=L"ZzenFree";RegisterClassW(&wc);
-            mainWindow=CreateWindowW(L"ZzenFree",L"Zzen · Free 0.3.0",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,1400,990,nullptr,nullptr,instance,nullptr);
+            mainWindow=CreateWindowW(L"ZzenFree",L"Zzen · Free 0.3.1",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,1400,990,nullptr,nullptr,instance,nullptr);
             BOOL dark=TRUE;DwmSetWindowAttribute(mainWindow,20,&dark,sizeof dark);ShowWindow(mainWindow,SW_SHOW);
             std::thread thread(worker);MSG msg;
             while(GetMessageW(&msg,nullptr,0,0)>0){if(!IsDialogMessageW(mainWindow,&msg)){TranslateMessage(&msg);DispatchMessageW(&msg);}}

@@ -2,7 +2,7 @@
  std::wstring readCategory(const Reading&r){for(auto&l:r.lines)if(l.y>.21&&l.y<.252&&l.x>.09&&l.x<.4&&l.text.size()>4){auto name=trim(l.text);while(!name.empty()&&!iswalnum(name.back()))name.pop_back();return name;}return L"";}
  int selection(const Image& im){for(int i=0;i<9;i++){auto p=im.at(int(im.width*.31),int(im.height*(311.+68*i)/1080));if(p[0]>140&&p[1]<160&&p[2]<55)return i;}return -1;}
  std::wstring signature(const std::vector<Line>& list){std::wstring s;for(auto&l:list)s+=norm(l.text)+L"|";return s;}
- static std::wstring nameKey(std::wstring s){s=norm(s);std::erase_if(s,[](wchar_t c){return !iswalnum(c);});return s;}
+ static std::wstring nameKey(std::wstring s){s=norm(canonicalTeamName(s));std::erase_if(s,[](wchar_t c){return !iswalnum(c);});return s;}
  size_t mergePage(const std::vector<Line>&list){std::vector<std::wstring> names;for(auto&l:list)names.push_back(l.text);size_t overlap=0;for(size_t n=1;n<=std::min(scanned.size(),names.size());n++){size_t errors=0;for(size_t j=0;j<n;j++)errors+=nameKey(scanned[scanned.size()-n+j])!=nameKey(names[j]);if(errors==0||(n>=6&&errors<=2))overlap=n;}size_t offset=scanned.size()-overlap;for(size_t i=overlap;i<names.size();i++)scanned.push_back(names[i]);return offset;} void clearPage(){scrolls=stalePages=topPass=0;lastPage.clear();lastSelection.clear();scanned.clear();}
  // The hovered row is not the scroll position: the mouse may highlight any row
  // while the list is already at its beginning. Verify the scrollbar instead.

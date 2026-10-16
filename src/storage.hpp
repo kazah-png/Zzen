@@ -25,8 +25,16 @@ inline void atomic(const fs::path& p, const std::wstring& t) {
     auto tmp = p; tmp += L".tmp"; writeText(tmp, t);
     if (fs::exists(p)) {
         auto bak = p; bak += L".bak";
-        if (!ReplaceFileW(p.c_str(), tmp.c_str(), bak.c_str(), 0, nullptr, nullptr))
-            throw std::runtime_error("No se pudo reemplazar el archivo de datos");
+        for (int attempt=0;;++attempt) {
+            if (ReplaceFileW(p.c_str(), tmp.c_str(), bak.c_str(), 0, nullptr, nullptr)) break;
+            auto error=GetLastError();
+            // Readers or antivirus scans can briefly deny delete sharing.
+            // Retry only transient locks, preserving the old file and backup.
+            if (attempt>=40 || (error!=ERROR_SHARING_VIOLATION && error!=ERROR_LOCK_VIOLATION && error!=ERROR_ACCESS_DENIED)
+                || !fs::exists(p) || !fs::exists(tmp))
+                throw std::runtime_error("No se pudo reemplazar el archivo de datos (Windows "+std::to_string(error)+")");
+            Sleep(50);
+        }
     } else if (!MoveFileW(tmp.c_str(), p.c_str())) throw std::runtime_error("No se pudo crear el archivo de datos");
 }
 inline std::wstring stamp(bool id=false) {
@@ -52,6 +60,10 @@ inline int boundedNumber(const JsonObject& o,const wchar_t* key,int fallback,int
     return int(std::clamp(n,double(low),double(high)));
 }
 struct CatalogEntry {std::wstring route,team;int occurrence=1,tab=0;};
+inline std::wstring canonicalTeamName(const std::wstring& name){
+ // Exact OCR alias verified in the Heroes' Victory Road team list.
+ return norm(trim(name))==L"easñvind"?L"Eastwind":trim(name);
+}
 struct Store {
     fs::path root;
     Config config;
@@ -71,7 +83,7 @@ struct Store {
         auto c=loadObj(root/L"data"/L"catalog.json").GetNamedArray(L"teams",JsonArray());
         for(auto value:c) {
             if(value.ValueType()!=JsonValueType::Object) continue;
-            auto j=value.GetObject(); auto route=js(j,L"route"),team=js(j,L"team");
+            auto j=value.GetObject(); auto route=js(j,L"route"),team=canonicalTeamName(js(j,L"team"));
             if(route.empty()||team.empty())continue;
             catalog.push_back({route,team,boundedNumber(j,L"occurrence",1,1,20),boundedNumber(j,L"tab",0,0,8)});
         }
